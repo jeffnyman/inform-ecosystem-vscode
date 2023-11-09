@@ -17,6 +17,27 @@
         }
       ]
     },
-    "source": {}
+    "source": {
+      "patterns": [
+        {
+          "include": "#comment"
+        }
+      ]
+    },
+    "comment": {
+      "name": "comment.block.inform7",
+      "begin": "\\[",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.definition.comment.inform7"
+        }
+      },
+      "end": "\\]",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.comment.inform7"
+        }
+      }
+    }
   }
 }
