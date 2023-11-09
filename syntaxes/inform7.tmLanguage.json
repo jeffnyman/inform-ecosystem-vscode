@@ -37,7 +37,21 @@
         "0": {
           "name": "punctuation.definition.comment.inform7"
         }
-      }
+      },
+      "patterns": [
+        {
+          "include": "#nestedComment"
+        }
+      ]
+    },
+    "nestedComment": {
+      "begin": "\\[",
+      "end": "\\]",
+      "patterns": [
+        {
+          "include": "#nestedComment"
+        }
+      ]
     }
   }
 }
