@@ -92,6 +92,11 @@
       },
       "patterns": [
         {
+          "comment": "This handles the case where a ] token is found but there was not a preceding [ token.",
+          "name": "invalid.illegal.inform7",
+          "match": "\\]|\\[(?=\")"
+        },
+        {
           "include": "#textSubstitution"
         }
       ]
@@ -99,7 +104,20 @@
     "textSubstitution": {
       "name": "constant.character.escape.inform7",
       "begin": "\\[",
-      "end": "\\]|([^\"])?(?=\")"
+      "end": "\\]|([^\"])?(?=\")",
+      "comment": "The endCaptures handles the case where a [ token is found with characters following but without a closing ] token.",
+      "endCaptures": {
+        "1": {
+          "name": "invalid.illegal.inform7"
+        }
+      },
+      "patterns": [
+        {
+          "comment": "This handles the case where a [ token is found after a [ token but when there's no intervening ] token.",
+          "name": "invalid.illegal.inform7",
+          "match": "\\["
+        }
+      ]
     },
     "heading": {
       "patterns": [
