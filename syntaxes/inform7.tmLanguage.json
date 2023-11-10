@@ -50,6 +50,9 @@
         },
         {
           "include": "#actionRule"
+        },
+        {
+          "include": "#variableDeclare"
         }
       ]
     },
@@ -162,6 +165,18 @@
         },
         "3": {
           "name": "keyword.control.is-action.inform7"
+        }
+      }
+    },
+    "variableDeclare": {
+      "name": "keyword.other.variableDeclare.inform7",
+      "match": "\\b(is|are)\\b(.+)\\b(that varies)\\b",
+      "captures": {
+        "1": {
+          "name": "keyword.control.is-are.inform7"
+        },
+        "3": {
+          "name": "keyword.control.that-varies.inform7"
         }
       }
     }
