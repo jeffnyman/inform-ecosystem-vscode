@@ -72,7 +72,17 @@
         "0": {
           "name": "punctuation.definition.string.end.inform7"
         }
-      }
+      },
+      "patterns": [
+        {
+          "include": "#textSubstitution"
+        }
+      ]
+    },
+    "textSubstitution": {
+      "name": "constant.character.escape.inform7",
+      "begin": "\\[",
+      "end": "\\]|([^\"])?(?=\")"
     },
     "heading": {
       "patterns": [
