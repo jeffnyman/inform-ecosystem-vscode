@@ -44,6 +44,9 @@
         },
         {
           "include": "#heading"
+        },
+        {
+          "include": "#tableName"
         }
       ]
     },
@@ -142,6 +145,10 @@
           "match": "(?i)^\\s*section:?\\s+.*$"
         }
       ]
+    },
+    "tableName": {
+      "name": "markup.underline.inform7",
+      "match": "(?i)^\\s*Table .*$"
     }
   }
 }
