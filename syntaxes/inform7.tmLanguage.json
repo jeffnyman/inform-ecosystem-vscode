@@ -47,6 +47,9 @@
         },
         {
           "include": "#tableName"
+        },
+        {
+          "include": "#actionRule"
         }
       ]
     },
@@ -149,6 +152,18 @@
     "tableName": {
       "name": "markup.underline.inform7",
       "match": "(?i)^\\s*Table .*$"
+    },
+    "actionRule": {
+      "name": "keyword.other.actionRule.inform7",
+      "match": "\\b(is an action)\\b(.+)\\b(applying to)\\b",
+      "captures": {
+        "1": {
+          "name": "constant.character.escape.is-action.inform7"
+        },
+        "3": {
+          "name": "keyword.control.is-action.inform7"
+        }
+      }
     }
   }
 }
