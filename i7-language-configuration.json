@@ -46,5 +46,15 @@
       "start": "^\\s*\\[#?(begin)\\b",
       "end": "^\\s*\\[#?end\\b"
     }
-  }
+  },
+  "indentationRules": {
+    "increaseIndentPattern": "^.*:$",
+    "decreaseIndentPattern": "^\\s*[].*$"
+  },
+  "onEnterRules": [
+    {
+      "beforeText": "^\\s*$",
+      "action": { "indent": "outdent" }
+    }
+  ]
 }
