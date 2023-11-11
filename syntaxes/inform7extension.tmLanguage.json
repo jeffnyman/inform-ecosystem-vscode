@@ -65,8 +65,15 @@
       "patterns": [
         {
           "include": "source.inform7#source"
+        },
+        {
+          "include": "#end"
         }
       ]
+    },
+    "end": {
+      "name": "markup.heading.inform7.extension",
+      "match": "^[^\"\\[\\]]+ ends? here.$"
     }
   }
 }
