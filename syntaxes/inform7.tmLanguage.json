@@ -53,6 +53,9 @@
         },
         {
           "include": "#variableDeclare"
+        },
+        {
+          "include": "#understand"
         }
       ]
     },
@@ -177,6 +180,21 @@
         },
         "3": {
           "name": "keyword.control.that-varies.inform7"
+        }
+      }
+    },
+    "understand": {
+      "name": "keyword.other.understand.inform7",
+      "match": "\\b(Understand)\\b(.+)\\b(as)\\b(.+)\\b(when)",
+      "captures": {
+        "1": {
+          "name": "keyword.control.is-are.inform7"
+        },
+        "3": {
+          "name": "keyword.control.that-varies.inform7"
+        },
+        "5": {
+          "name": "keyword.control.when.inform7"
         }
       }
     }
