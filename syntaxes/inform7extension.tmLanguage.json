@@ -21,6 +21,23 @@
       "end": "$END",
       "patterns": [
         {
+          "include": "#rubric"
+        },
+        {
+          "include": "#body"
+        }
+      ]
+    },
+    "rubric": {
+      "begin": "^\"[^\"]*\"$",
+      "beginCaptures": {
+        "0": {
+          "name": "keyword.other.rubric.inform7.extension"
+        }
+      },
+      "end": "$END",
+      "patterns": [
+        {
           "include": "#body"
         }
       ]
