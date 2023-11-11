@@ -85,7 +85,15 @@
           "name": "markup.heading.inform7.extension"
         }
       },
-      "end": "$END"
+      "end": "$END",
+      "patterns": [
+        {
+          "include": "source.inform7#comment"
+        },
+        {
+          "include": "source.inform7#text"
+        }
+      ]
     }
   }
 }
