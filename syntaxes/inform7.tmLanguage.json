@@ -21,6 +21,9 @@
       "patterns":[
         {
           "include": "#comment"
+        },
+        {
+          "include": "#text"
         }
       ]
     },
@@ -52,6 +55,21 @@
           "include": "#nestedComment"
         }
       ]
+    },
+    "text": {
+      "name": "string.quoted.double.inform7",
+      "begin": "\"",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.double.quote.string.begin"
+        }
+      },
+      "end": "\"",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.double.quote.string.end"
+        }
+      }
     }
   }
 }
