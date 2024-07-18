@@ -24,6 +24,9 @@
         },
         {
           "include": "#text"
+        },
+        {
+          "include": "#heading"
         }
       ]
     },
@@ -80,6 +83,30 @@
       "name": "constant.character.escape.inform7",
       "begin": "\\[",
       "end": "\\]|([^\"])?(?=\")"
+    },
+    "heading": {
+      "patterns": [
+        {
+          "name": "markup.heading.1.inform7",
+          "match": "(?i)^\\s*volume:?\\s+.*$"
+        },
+        {
+          "name": "markup.heading.2.inform7",
+          "match": "(?i)^\\s*book:?\\s+.*$"
+        },
+        {
+          "name": "markup.heading.3.inform7",
+          "match": "(?i)^\\s*part:?\\s+.*$"
+        },
+        {
+          "name": "markup.heading.4.inform7",
+          "match": "(?i)^\\s*chapter:?\\s+.*$"
+        },
+        {
+          "name": "markup.heading.5.inform7",
+          "match": "(?i)^\\s*section:?\\s+.*$"
+        }
+      ]
     }
   }
 }
