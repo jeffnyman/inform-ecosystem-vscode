@@ -26,5 +26,25 @@
     "syntax",
     "vscode",
     "extension"
-  ]
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "inform7",
+        "aliases": [
+          "Inform 7",
+          "inform7",
+          "i7"
+        ],
+        "extensions": [
+          ".ni",
+          ".i7"
+        ],
+        "icon": {
+          "light": "./icons/i7-light.png",
+          "dark": "./icons/i7-dark.png"
+        }
+      }
+    ]
+  }
 }
