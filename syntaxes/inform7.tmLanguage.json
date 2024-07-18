@@ -10,7 +10,13 @@
   "repository": {
     "body": {
       "begin": "(?=.)",
-      "end": "$END"
-    }
+      "end": "$END",
+      "patterns": [
+        {
+          "include": "#source"
+        }
+      ]
+    },
+    "source": {}
   }
 }
