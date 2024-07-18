@@ -43,7 +43,8 @@
         "icon": {
           "light": "./icons/i7-light.png",
           "dark": "./icons/i7-dark.png"
-        }
+        },
+        "configuration": "./i7-language-configuration.json"
       }
     ]
   }
