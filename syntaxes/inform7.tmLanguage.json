@@ -17,6 +17,27 @@
         }
       ]
     },
-    "source": {}
+    "source": {
+      "patterns":[
+        {
+          "include": "#comment"
+        }
+      ]
+    },
+    "comment": {
+      "name": "comment.block.inform7",
+      "begin": "\\[",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.bracket.open"
+        }
+      },
+      "end": "\\]",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.bracket.close"
+        }
+      }
+    }
   }
 }
