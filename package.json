@@ -1,0 +1,21 @@
+{
+  "name": "inform-ecosystem-vscode",
+  "version": "0.1.0",
+  "description": "Providing language support for the Inform ecosystem.",
+  "author": "Jeff Nyman <jeffnyman@gmail.com> (https://testerstories.com)",
+  "license": "MIT",
+  "homepage": "https://github.com/jeffnyman/inform-ecosystem-vscode",
+  "bugs": "https://github.com/jeffnyman/inform-ecosystem-vscode/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jeffnyman/inform-ecosystem-vscode.git"
+  },
+  "keywords": [
+    "inform7",
+    "language",
+    "highlight",
+    "syntax",
+    "vscode",
+    "extension"
+  ]
+}
