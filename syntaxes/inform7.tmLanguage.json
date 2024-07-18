@@ -37,7 +37,21 @@
         "0": {
           "name": "punctuation.bracket.close"
         }
-      }
+      },
+      "patterns": [
+        {
+          "include": "#nestedComment"
+        }
+      ]
+    },
+    "nestedComment": {
+      "begin": "\\[",
+      "end": "\\]",
+      "patterns": [
+        {
+          "include": "#nestedComment"
+        }
+      ]
     }
   }
 }
