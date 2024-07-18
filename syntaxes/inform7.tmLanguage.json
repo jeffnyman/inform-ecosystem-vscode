@@ -69,7 +69,17 @@
         "0": {
           "name": "punctuation.double.quote.string.end"
         }
-      }
+      },
+      "patterns": [
+        {
+          "include": "#textSubstitution"
+        }
+      ]
+    },
+    "textSubstitution": {
+      "name": "constant.character.escape.inform7",
+      "begin": "\\[",
+      "end": "\\]|([^\"])?(?=\")"
     }
   }
 }
