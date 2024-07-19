@@ -20,6 +20,7 @@
     "Programming Languages"
   ],
   "keywords": [
+    "inform6",
     "inform7",
     "language",
     "highlight",
@@ -62,6 +63,23 @@
           "dark": "./icons/i7x-dark.png"
         },
         "configuration": "./i7-language-configuration.json"
+      },
+      {
+        "id": "inform6",
+        "aliases": [
+          "Inform 6",
+          "inform6",
+          "i6"
+        ],
+        "extensions": [
+          ".i6",
+          ".inf",
+          ".h"
+        ],
+        "icon": {
+          "light": "./icons/i6-light.png",
+          "dark": "./icons/i6-dark.png"
+        }
       }
     ],
     "grammars": [
