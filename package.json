@@ -79,7 +79,8 @@
         "icon": {
           "light": "./icons/i6-light.png",
           "dark": "./icons/i6-dark.png"
-        }
+        },
+        "configuration": "./i6-language-configuration.json"
       }
     ],
     "grammars": [
