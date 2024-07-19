@@ -68,12 +68,24 @@
         },
         {
           "include": "#end"
+        },
+        {
+          "include": "#documentation"
         }
       ]
     },
     "end": {
       "name": "markup.heading.inform7.extension",
       "match": "^[^\"\\[\\]]+ ends? here.$"
+    },
+    "documentation": {
+      "begin": "(?i)^\\s*(----\\s+documentation\\s+----).*$",
+      "beginCaptures": {
+        "1": {
+          "name": "markup.heading.inform7.extension"
+        }
+      },
+      "end": "$END"
     }
   }
 }
