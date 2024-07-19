@@ -95,6 +95,9 @@
         },
         {
           "include": "#documentationHeading"
+        },
+        {
+          "include": "#documentationExample"
         }
       ]
     },
@@ -107,6 +110,19 @@
         {
           "name": "markup.heading.inform7.extension",
           "match": "(?i)^Example: +\\*{1,4} +[^-]+ +- +.*$"
+        }
+      ]
+    },
+    "documentationExample": {
+      "begin": "(?=^\\t+)",
+      "end": "$",
+      "patterns": [
+        {
+          "name": "keyword.control.inform7.extension",
+          "match": "\\*:"
+        },
+        {
+          "include": "source.inform7#source"
         }
       ]
     }
