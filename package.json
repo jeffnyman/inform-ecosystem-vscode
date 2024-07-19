@@ -59,7 +59,8 @@
         "icon": {
           "light": "./icons/i7x-light.png",
           "dark": "./icons/i7x-dark.png"
-        }
+        },
+        "configuration": "./i7-language-configuration.json"
       }
     ],
     "grammars": [
