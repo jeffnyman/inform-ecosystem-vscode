@@ -14,7 +14,7 @@
     "url": "https://github.com/jeffnyman/inform-ecosystem-vscode.git"
   },
   "engines": {
-    "vscode": "^1.90.0"
+    "vscode": "^1.91.0"
   },
   "categories": [
     "Programming Languages"
@@ -74,6 +74,12 @@
         "language": "inform7extension",
         "scopeName": "source.inform7.extension",
         "path": "./syntaxes/inform7extension.tmLanguage.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "infeco.testing",
+        "title": "Testing Inform Ecosystem"
       }
     ]
   },
