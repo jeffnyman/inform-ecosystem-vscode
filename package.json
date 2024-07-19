@@ -85,6 +85,7 @@
   },
   "scripts": {
     "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
     "lint": "eslint src --ext .ts"
   },
   "devDependencies": {
