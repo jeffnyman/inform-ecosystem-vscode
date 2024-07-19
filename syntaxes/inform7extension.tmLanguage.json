@@ -38,6 +38,23 @@
       "end": "$END",
       "patterns": [
         {
+          "include": "#credits"
+        },
+        {
+          "include": "#body"
+        }
+      ]
+    },
+    "credits": {
+      "begin": "^\"[^\"]*\"$",
+      "beginCaptures": {
+        "0": {
+          "name": "keyword.other.credits.inform7.extension"
+        }
+      },
+      "end": "$END",
+      "patterns": [
+        {
           "include": "#body"
         }
       ]
