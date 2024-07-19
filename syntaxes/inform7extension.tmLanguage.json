@@ -89,6 +89,9 @@
       "patterns": [
         {
           "include": "source.inform7#comment"
+        },
+        {
+          "include": "source.inform7#text"
         }
       ]
     }
