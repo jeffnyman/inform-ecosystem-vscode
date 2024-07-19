@@ -92,6 +92,21 @@
         },
         {
           "include": "source.inform7#text"
+        },
+        {
+          "include": "#documentationHeading"
+        }
+      ]
+    },
+    "documentationHeading": {
+      "patterns": [
+        {
+          "name": "markup.heading.inform7.extension",
+          "match": "(?i)^\\s*(part|chapter|section): .*$"
+        },
+        {
+          "name": "markup.heading.inform7.extension",
+          "match": "(?i)^Example: +\\*{1,4} +[^-]+ +- +.*$"
         }
       ]
     }
