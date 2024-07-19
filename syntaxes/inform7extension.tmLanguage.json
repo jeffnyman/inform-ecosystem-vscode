@@ -10,7 +10,12 @@
   "repository": {
     "body": {
       "begin": "(?=.)",
-      "end": "$END"
+      "end": "$END",
+      "patterns": [
+        {
+          "include": "source.inform7#source"
+        }
+      ]
     }
   }
 }
