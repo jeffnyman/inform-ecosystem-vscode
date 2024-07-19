@@ -27,6 +27,7 @@
     "vscode",
     "extension"
   ],
+  "main": "./out/extension.js",
   "contributes": {
     "languages": [
       {
@@ -77,6 +78,7 @@
     ]
   },
   "scripts": {
+    "compile": "tsc -p ./",
     "lint": "eslint src --ext .ts"
   },
   "devDependencies": {
