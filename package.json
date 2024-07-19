@@ -75,5 +75,10 @@
         "path": "./syntaxes/inform7extension.tmLanguage.json"
       }
     ]
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.11",
+    "@types/vscode": "^1.91.0",
+    "typescript": "^5.5.3"
   }
 }
