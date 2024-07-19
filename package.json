@@ -45,6 +45,21 @@
           "dark": "./icons/i7-dark.png"
         },
         "configuration": "./i7-language-configuration.json"
+      },
+      {
+        "id": "inform7extension",
+        "aliases": [
+          "Inform 7 Extension",
+          "inform7extension",
+          "i7extension"
+        ],
+        "extensions": [
+          ".i7x"
+        ],
+        "icon": {
+          "light": "./icons/i7x-light.png",
+          "dark": "./icons/i7x-dark.png"
+        }
       }
     ],
     "grammars": [
