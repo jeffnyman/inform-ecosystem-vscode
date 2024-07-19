@@ -2,6 +2,10 @@
 
 This extension is designed to provide support for languages in the Inform ecosystem.
 
+## Features
+
+The extension adds syntax highlighting to Inform 7 source text (in `.ni` or `.i7` files) as well as Inform 7 extensions (in `.i7x` files).
+
 ## Implementation
 
 This project is a Visual Studio code extension. For language extensions, the standard [TextMate grammar](https://macromates.com/manual/en/language_grammars) style is adopted. These grammars rely on what are referred to as [Oniguruma regular expressions](https://macromates.com/manual/en/regular_expressions). These are written in JSON format. I used a moderately helpful resource on [writing a TextMate grammar](https://www.apeth.com/nonblog/stories/textmatebundle.html).
@@ -11,3 +15,5 @@ How all of this works is that Visual Studio Code uses the provided TextMate gram
 ## Aspirations
 
 The initial goal is to provide syntax highlighting. Semantic highlighting is something I will be looking at in the future.
+
+Currently Inform 7 is supported. The goal is to also support Inform 6 as well as other tools within the Inform ecosystem, such as Inweb and Intest.
