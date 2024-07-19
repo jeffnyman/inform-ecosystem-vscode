@@ -4,10 +4,27 @@
   "name": "Inform 7 extension",
   "patterns": [
     {
+      "include": "#title"
+    },
+    {
       "include": "#body"
     }
   ],
   "repository": {
+    "title": {
+      "begin": "^.*$",
+      "beginCaptures": {
+        "0": {
+          "name": "markup.heading.inform7.extension"
+        }
+      },
+      "end": "$END",
+      "patterns": [
+        {
+          "include": "#body"
+        }
+      ]
+    },
     "body": {
       "begin": "(?=.)",
       "end": "$END",
