@@ -31,6 +31,24 @@
               "name": "punctuation.double.quote.string.end.inform6"
             }
           }
+        },
+        {
+          "name": "string.quoted.single.inform6",
+          "begin": "'",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.single.quote.string.begin.inform6"
+            }
+          },
+          "end": "(//(?:p)?)?(')",
+          "endCaptures": {
+            "1": {
+              "name": "constant.character.escape.inform6"
+            },
+            "2": {
+              "name": "punctuation.single.quote.string.end.inform6"
+            }
+          }
         }
       ]
     }
