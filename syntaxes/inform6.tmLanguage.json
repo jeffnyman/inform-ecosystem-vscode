@@ -4,6 +4,9 @@
   "name": "Inform 6",
   "patterns": [
     {
+      "include": "#optionComment"
+    },
+    {
       "include": "#comment"
     },
     {
@@ -11,6 +14,10 @@
     }
   ],
   "repository": {
+    "optionComment": {
+      "name": "keyword.other.directive.inform6",
+      "match": "!%.*$"
+    },
     "comment": {
       "name": "comment.line.inform6",
       "match": "!.*$"
