@@ -5,12 +5,34 @@
   "patterns": [
     {
       "include": "#comment"
+    },
+    {
+      "include": "#string"
     }
   ],
   "repository": {
     "comment": {
       "name": "comment.line.inform6",
       "match": "!.*$"
+    },
+    "string": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.inform6",
+          "begin": "\"",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.double.quote.string.begin.inform6"
+            }
+          },
+          "end": "\"",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.double.quote.string.end.inform6"
+            }
+          }
+        }
+      ]
     }
   }
 }
