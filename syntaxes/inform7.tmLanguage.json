@@ -84,13 +84,13 @@
       "begin": "\"",
       "beginCaptures": {
         "0": {
-          "name": "punctuation.double.quote.string.begin"
+          "name": "punctuation.double.quote.string.begin.inform7"
         }
       },
       "end": "\"",
       "endCaptures": {
         "0": {
-          "name": "punctuation.double.quote.string.end"
+          "name": "punctuation.double.quote.string.end.inform7"
         }
       },
       "patterns": [
