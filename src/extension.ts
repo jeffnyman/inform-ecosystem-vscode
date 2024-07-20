@@ -3,7 +3,7 @@ import * as vscode from "vscode";
 export function activate(context: vscode.ExtensionContext) {
   console.log("Inform Ecosystem Extension enabled.");
 
-  let disposable = vscode.commands.registerCommand("infeco.testing", () => {
+  let disposable = vscode.commands.registerCommand("infeco.verify", () => {
     vscode.window.showInformationMessage("Inform Ecosystem Active.");
   });
 
