@@ -93,6 +93,11 @@
         "language": "inform7extension",
         "scopeName": "source.inform7.extension",
         "path": "./syntaxes/inform7extension.tmLanguage.json"
+      },
+      {
+        "language": "inform6",
+        "scopeName": "source.inform6",
+        "path": "./syntaxes/inform6.tmLanguage.json"
       }
     ],
     "commands": [
