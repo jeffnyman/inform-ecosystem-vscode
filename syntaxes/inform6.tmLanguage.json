@@ -14,6 +14,9 @@
     },
     {
       "include": "#constant"
+    },
+    {
+      "include": "#class"
     }
   ],
   "repository": {
@@ -88,6 +91,18 @@
         {
           "name": "constant.numeric.integer.character.inform6",
           "match": "'(@(\\{[0-9a-fA-F]{1,6}\\}|[\\^`:][aeiouAEIOU]|:y|'[aeiouyAEIOUY]|c[cC]|~[anoANO]|/[oO]|o[aA]|ss|oe|OE|ae|AE|th|Th|et|Et|LL|!!|\\?\\?|<<|>>)|[^@])'"
+        }
+      ]
+    },
+    "class": {
+      "patterns": [
+        {
+          "name": "support.class.library.inform6",
+          "match": "\\b(CompassDirection|Menu|Option|SwitchOption)\\b"
+        },
+        {
+          "name": "support.class.meta.inform6",
+          "match": "\\b(Class|Object|Routine|String)\\b"
         }
       ]
     }
