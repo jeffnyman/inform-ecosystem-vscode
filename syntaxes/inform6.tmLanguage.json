@@ -11,6 +11,9 @@
     },
     {
       "include": "#string"
+    },
+    {
+      "include": "#constant"
     }
   ],
   "repository": {
@@ -56,6 +59,35 @@
               "name": "punctuation.single.quote.string.end.inform6"
             }
           }
+        }
+      ]
+    },
+    "constant": {
+      "patterns": [
+        {
+          "name": "constant.numeric.integer.binary.inform6",
+          "match": "\\$\\$[01]+\\b"
+        },
+        {
+          "name": "constant.numeric.integer.hexadecimal.inform6",
+          "match": "\\$[0-9a-fA-F]+\\b"
+        },
+        {
+          "name": "constant.numeric.integer.inform6",
+          "match": "(\\b|-)\\d+\\b"
+        },
+        {
+          "name": "constant.numeric.float.inform6",
+          "match": "\\$[\\+-]\\d+(\\.\\d+)?(e[\\+-]\\d+)?\\b"
+        },
+        {
+          "comment": "The NULL does show up in the library but it's not documented anywhere officially that I can see.",
+          "name": "constant.language.inform6",
+          "match": "\\b(false|nothing|NULL|true)\\b"
+        },
+        {
+          "name": "constant.numeric.integer.character.inform6",
+          "match": "'(@(\\{[0-9a-fA-F]{1,6}\\}|[\\^`:][aeiouAEIOU]|:y|'[aeiouyAEIOUY]|c[cC]|~[anoANO]|/[oO]|o[aA]|ss|oe|OE|ae|AE|th|Th|et|Et|LL|!!|\\?\\?|<<|>>)|[^@])'"
         }
       ]
     }
