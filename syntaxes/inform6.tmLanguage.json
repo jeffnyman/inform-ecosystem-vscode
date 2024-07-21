@@ -20,6 +20,9 @@
     },
     {
       "include": "#routine"
+    },
+    {
+      "include": "#variable"
     }
   ],
   "repository": {
@@ -160,6 +163,27 @@
         },
         {
           "include": "#class"
+        }
+      ]
+    },
+    "variable": {
+      "patterns": [
+        {
+          "name": "variable.language.library.inform6",
+          "match": "\\b(action|action_to_be|actor|c_style|consult_from|consult_words|deadflag|et_flag|etype|herobj|himobj|inp1|inp2|inventory_stage|itobj|keep_silent|listing_together|lm_n|lm_o|location|lookmode|nodify_mode|noun|parsed_number|parser_action|parser_one|parser_two|real_location|receive_action|scope_reason|scope_stage|score|second|special_number|standard_interpreter|the_time|vague_obj|vague_word|verb_word|verb_wordnum|wn)\\b"
+        },
+        {
+          "comment": "The possible values held by the action variable can be referred to using ## notation.",
+          "name": "variable.other.actiontype.inform6",
+          "match": "##[a-zA-Z]+\\b"
+        },
+        {
+          "name": "variable.language.grammartoken.inform6",
+          "match": "\\b(creature|held|multi|multiexcept|multiheld|multiinside|number|topic)\\b"
+        },
+        {
+          "name": "variable.language.glulx.inform6",
+          "match": "\\b(gg_event|gg_mainwin|gg_statuswin)\\b"
         }
       ]
     }
