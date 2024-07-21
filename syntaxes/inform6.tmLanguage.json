@@ -32,6 +32,9 @@
     },
     {
       "include": "#keyword"
+    },
+    {
+      "include": "#directive"
     }
   ],
   "repository": {
@@ -223,6 +226,9 @@
         },
         {
           "include": "#keyword"
+        },
+        {
+          "include": "#directive"
         }
       ]
     },
@@ -380,6 +386,39 @@
             },
             "3": {
               "name": "keyword.control.inform6"
+            }
+          }
+        }
+      ]
+    },
+    "directive": {
+      "patterns": [
+        {
+          "comment": "Directives are case insensitive and can be written with a # sign.",
+          "name": "keyword.other.directive.inform6",
+          "match": "(?i)(\\b|#)(Abbreviate|Array|Attribute|Class|Constant|Default|Dictionary|End|Endif|Extend|Global|Ifdef|Iffalse|Ifndef|Ifnot|Iftrue|Include|Message(\\s+(error|fatalerror|warning))?|Object|Origsource|Property(\\s+additive)?|Release|Replace|Serial|Statusline\\s+(time|score)|System_file|Undef|Verb(\\s+meta)?|Zcharacter(\\s+table)?)\\b"
+        },
+        {
+          "comment": "Some directives are obsolete or exist for compiler maintenance only.",
+          "name": "invalid.deprecated.inform6",
+          "match": "(?i)(\\b|#)(Fake_action|Ifv3|Ifv5|Import|Link|Lowstring|Nearby|Stub|Switches|Trace|Version)\\b"
+        },
+        {
+          "comment": "Here first, last and only go with the Extend directive; alias goes with Property or Attribute.",
+          "name": "keyword.other.inform6",
+          "match": "\\b(alias|first|last|only)\\b"
+        },
+        {
+          "match": "(?i)\\b(Array)\\s+[a-zA-Z_]\\w*\\s+(static\\s+)?(-->|->|buffer\\b|string\\b|table\\b)",
+          "captures": {
+            "1": {
+              "name": "keyword.other.directive.inform6"
+            },
+            "2": {
+              "name": "keyword.other.directive.inform6"
+            },
+            "3": {
+              "name": "keyword.other.directive.inform6"
             }
           }
         }
