@@ -23,6 +23,9 @@
     },
     {
       "include": "#variable"
+    },
+    {
+      "include": "#object"
     }
   ],
   "repository": {
@@ -229,6 +232,65 @@
         {
           "name": "variable.language.glulx.inform6",
           "match": "\\b(gg_event|gg_mainwin|gg_statuswin)\\b"
+        }
+      ]
+    },
+    "object": {
+      "patterns": [
+        {
+          "comment": "Inform objects can use arrows to indicate relative placement.",
+          "match": "^([a-zA-Z_]\\w*)\\s*((?:->)(?:\\s*->)*)\\s*([a-zA-Z_]\\w*)?\\s*(\"[^\"]*?\")?\\s*([a-zA-Z_]\\w*)?",
+          "captures": {
+            "1": {
+              "name": "entity.name.type.inform6"
+            },
+            "2": {
+              "name": "storage.modifier.inform6"
+            },
+            "3": {
+              "name": "variable.other.inform6"
+            },
+            "4": {
+              "name": "string.quoted.double.inform6",
+              "patterns": [
+                {
+                  "include": "#printingVariable"
+                },
+                {
+                  "include": "#escapeSequence"
+                }
+              ]
+            },
+            "5": {
+              "name": "invalid.illegal.inform6"
+            }
+          }
+        },
+        {
+          "comment": "Inform objects can use absolute placement with no arrows.",
+          "match": "^([a-zA-Z_]\\w*)\\s*([a-zA-Z_]\\w*)?\\s*(\"[^\"]*?\")?\\s*([a-zA-Z_]\\w*)?",
+          "captures": {
+            "1": {
+              "name": "entity.name.type.inform6"
+            },
+            "2": {
+              "name": "variable.other.inform6"
+            },
+            "3": {
+              "name": "string.quoted.double.inform6",
+              "patterns": [
+                {
+                  "include": "#printingVariable"
+                },
+                {
+                  "include": "#escapeSequence"
+                }
+              ]
+            },
+            "4": {
+              "name": "storage.modifier.inform6"
+            }
+          }
         }
       ]
     }
