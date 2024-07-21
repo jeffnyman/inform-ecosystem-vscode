@@ -163,6 +163,9 @@
         },
         {
           "include": "#class"
+        },
+        {
+          "include": "#variable"
         }
       ]
     },
