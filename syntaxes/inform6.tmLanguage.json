@@ -26,6 +26,9 @@
     },
     {
       "include": "#object"
+    },
+    {
+      "include": "#operator"
     }
   ],
   "repository": {
@@ -211,6 +214,9 @@
         },
         {
           "include": "#variable"
+        },
+        {
+          "include": "#operator"
         }
       ]
     },
@@ -291,6 +297,55 @@
               "name": "storage.modifier.inform6"
             }
           }
+        }
+      ]
+    },
+    "operator": {
+      "patterns": [
+        {
+          "name": "keyword.operator.arithmetic.inform6",
+          "match": "\\+|-|\\*|/|%"
+        },
+        {
+          "name": "keyword.operator.comparison.inform6",
+          "match": "==|~=|<=|<|>=|>"
+        },
+        {
+          "name": "keyword.operator.assignment.inform6",
+          "match": "="
+        },
+        {
+          "name": "keyword.operator.increment.inform6",
+          "match": "\\+\\+"
+        },
+        {
+          "name": "keyword.operator.decrement.inform6",
+          "match": "--"
+        },
+        {
+          "comment": "Everything except private and class are condition operators. Here class, private and with are segments of an object definition. It's technically the case that has serves as both.",
+          "name": "keyword.operator.expression.inform6",
+          "match": "\\b(class|has|hasnt|in|notin|ofclass|or|private|provides|with)\\b"
+        },
+        {
+          "name": "keyword.operator.logical.inform6",
+          "match": "&&|\\|\\||~~"
+        },
+        {
+          "name": "keyword.operator.bitwise.inform6",
+          "match": "&|\\||~"
+        },
+        {
+          "name": "keyword.operator.array.inform6",
+          "match": "-->|->"
+        },
+        {
+          "name": "keyword.operator.accessor.inform6",
+          "match": "\\.&|\\.#|\\.|::"
+        },
+        {
+          "name": "keyword.operator.separator.inform6",
+          "match": ","
         }
       ]
     }
