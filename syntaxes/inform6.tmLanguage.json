@@ -17,6 +17,9 @@
     },
     {
       "include": "#class"
+    },
+    {
+      "include": "#routine"
     }
   ],
   "repository": {
@@ -103,6 +106,39 @@
         {
           "name": "support.class.meta.inform6",
           "match": "\\b(Class|Object|Routine|String)\\b"
+        }
+      ]
+    },
+    "routine": {
+      "name": "meta.routine.inform6",
+      "begin": "^\\s*\\[",
+      "end": "\\]",
+      "captures": {
+        "0": {
+          "name": "keyword.other.directive.inform6"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#routineHeader"
+        }
+      ]
+    },
+    "routineHeader": {
+      "begin": "([a-zA-Z_]\\w*)\\b",
+      "beginCaptures": {
+        "1": {
+          "name": "entity.name.function.inform6"
+        }
+      },
+      "end": "(?=;)",
+      "patterns": [
+        {
+          "include": "#comment"
+        },
+        {
+          "name": "variable.parameter.inform6",
+          "match": "\\b[a-zA-Z_]\\w*\\b"
         }
       ]
     }
