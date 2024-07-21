@@ -121,6 +121,9 @@
       "patterns": [
         {
           "include": "#routineHeader"
+        },
+        {
+          "include": "#routineBody"
         }
       ]
     },
@@ -139,6 +142,24 @@
         {
           "name": "variable.parameter.inform6",
           "match": "\\b[a-zA-Z_]\\w*\\b"
+        }
+      ]
+    },
+    "routineBody": {
+      "begin": "(?=;)",
+      "end": "(?=\\])",
+      "patterns": [
+        {
+          "include": "#comment"
+        },
+        {
+          "include": "#string"
+        },
+        {
+          "include": "#constant"
+        },
+        {
+          "include": "#class"
         }
       ]
     }
