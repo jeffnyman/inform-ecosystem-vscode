@@ -29,6 +29,9 @@
     },
     {
       "include": "#operator"
+    },
+    {
+      "include": "#keyword"
     }
   ],
   "repository": {
@@ -217,6 +220,9 @@
         },
         {
           "include": "#operator"
+        },
+        {
+          "include": "#keyword"
         }
       ]
     },
@@ -346,6 +352,36 @@
         {
           "name": "keyword.operator.separator.inform6",
           "match": ","
+        }
+      ]
+    },
+    "keyword": {
+      "patterns": [
+        {
+          "name": "keyword.control.inform6",
+          "match": "\\b(break|continue|default|do|else|for|if|jump|new_line|print|print_ret|return|rfalse|rtrue|spaces|string|switch|until|while)\\b"
+        },
+        {
+          "name": "keyword.control.zmachine.inform6",
+          "match": "\\b(box|font\\s+(on|off)|give|inversion|objectloop|quit|read|remove|restore|save|style\\s+(roman|bold|underline|reverse|fixed))\\b"
+        },
+        {
+          "match": "\\b(move)\\s+([a-zA-Z_]\\w*)\\s+(to)\\b",
+          "captures": {
+            "1": {
+              "name": "keyword.control.inform6"
+            },
+            "2": {
+              "patterns": [
+                {
+                  "include": "#variable"
+                }
+              ]
+            },
+            "3": {
+              "name": "keyword.control.inform6"
+            }
+          }
         }
       ]
     }
