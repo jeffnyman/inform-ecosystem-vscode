@@ -19,3 +19,5 @@ How all of this works is that Visual Studio Code uses the provided TextMate gram
 The initial goal is to provide syntax highlighting. Semantic highlighting is something I will be looking at in the future.
 
 Currently Inform 7 is supported. The goal is to also support Inform 6 as well as other tools within the Inform ecosystem, such as Inweb and Intest.
+
+See the [CHANGELOG](CHANGELOG.md) for more details.
