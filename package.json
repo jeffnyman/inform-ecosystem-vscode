@@ -74,7 +74,8 @@
         "extensions": [
           ".i6",
           ".inf",
-          ".h"
+          ".h",
+          ".i6h"
         ],
         "icon": {
           "light": "./icons/i6-light.png",
