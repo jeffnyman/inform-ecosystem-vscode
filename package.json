@@ -135,6 +135,11 @@
         "language": "intest",
         "scopeName": "source.intest",
         "path": "./syntaxes/intest.tmLanguage.json"
+      },
+      {
+        "language": "inweb",
+        "scopeName": "source.inweb",
+        "path": "./syntaxes/inweb.tmLanguage.json"
       }
     ],
     "commands": [
