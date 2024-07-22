@@ -114,6 +114,11 @@
         "language": "inform6",
         "scopeName": "source.inform6",
         "path": "./syntaxes/inform6.tmLanguage.json"
+      },
+      {
+        "language": "intest",
+        "scopeName": "source.intest",
+        "path": "./syntaxes/intest.tmLanguage.json"
       }
     ],
     "commands": [
