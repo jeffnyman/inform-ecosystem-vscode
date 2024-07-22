@@ -97,6 +97,21 @@
           "dark": "./icons/intest-dark.png"
         },
         "configuration": "./intest-language-configuration.json"
+      },
+      {
+        "id": "inweb",
+        "aliases": [
+          "Inweb",
+          "inweb"
+        ],
+        "extensions": [
+          ".inweb",
+          ".w"
+        ],
+        "icon": {
+          "light": "./icons/inweb-light.png",
+          "dark": "./icons/inweb-dark.png"
+        }
       }
     ],
     "grammars": [
