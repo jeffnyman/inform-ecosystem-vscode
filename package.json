@@ -111,7 +111,8 @@
         "icon": {
           "light": "./icons/inweb-light.png",
           "dark": "./icons/inweb-dark.png"
-        }
+        },
+        "configuration": "./inweb-language-configuration.json"
       }
     ],
     "grammars": [
