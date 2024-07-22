@@ -95,7 +95,8 @@
         "icon": {
           "light": "./icons/intest-light.png",
           "dark": "./icons/intest-dark.png"
-        }
+        },
+        "configuration": "./intest-language-configuration.json"
       }
     ],
     "grammars": [
