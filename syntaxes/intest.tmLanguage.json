@@ -1,5 +1,33 @@
 {
   "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
   "scopeName": "source.intest",
-  "name": "Intest"
+  "name": "Intest",
+  "patterns": [
+    {
+       "include": "#delia"
+    }
+  ],
+  "repository": {
+    "delia": {
+      "patterns": [
+        {
+          "name": "constant.language.intest",
+          "match": "(copy:|default:|exists:|match text:|mkdir:|or:|pass:|remove:|set:|show:|step:)"
+        },
+        {
+          "name": "keyword.control.intest",
+          "match": "(-cases|-recipe|-end)"
+        },
+        {
+          "name": "variable.parameter.local.intest",
+          "match": "^\\$\\w+"
+        },
+        {
+          "name": "variable.parameter.global.intest",
+          "match": "^\\$\\$\\w+"
+        }
+      ]
+      
+    }
+  }
 }
