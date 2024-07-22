@@ -1,7 +1,7 @@
 {
   "name": "inform-ecosystem-vscode",
   "displayName": "Inform Ecosystem for VS Code",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Providing language support for the Inform ecosystem.",
   "author": "Jeff Nyman <jeffnyman@gmail.com> (https://testerstories.com)",
   "publisher": "jeffnyman",
