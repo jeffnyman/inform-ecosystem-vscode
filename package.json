@@ -82,6 +82,20 @@
           "dark": "./icons/i6-dark.png"
         },
         "configuration": "./i6-language-configuration.json"
+      },
+      {
+        "id": "intest",
+        "aliases": [
+          "Intest",
+          "intest"
+        ],
+        "extensions": [
+          ".intest"
+        ],
+        "icon": {
+          "light": "./icons/intest-light.png",
+          "dark": "./icons/intest-dark.png"
+        }
       }
     ],
     "grammars": [
