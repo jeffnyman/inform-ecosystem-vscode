@@ -1,0 +1,61 @@
+/*
+  Inform Ecosystem player: adapt Parchment to the VS Code colour theme.
+  Loaded after parchment.css, so these :root variables win. VS Code exposes
+  its theme as --vscode-* variables inside every webview.
+*/
+:root {
+  --glkote-buffer-bg: var(--vscode-editor-background);
+  --glkote-buffer-fg: var(--vscode-editor-foreground);
+  --glkote-grid-bg: var(--vscode-editorWidget-background, var(--vscode-editor-background));
+  --glkote-grid-fg: var(--vscode-editor-foreground);
+  --glkote-grid-reverse-bg: var(--vscode-editor-foreground);
+  --glkote-grid-reverse-fg: var(--vscode-editor-background);
+  --glkote-input-fg: var(--vscode-textLink-foreground, var(--vscode-editor-foreground));
+  --glkote-mono-family: var(--vscode-editor-font-family, monospace);
+  --glkote-grid-mono-family: var(--vscode-editor-font-family, monospace);
+  --asyncglk-ui-bg: var(--vscode-editorWidget-background);
+  --asyncglk-ui-fg: var(--vscode-editorWidget-foreground);
+  --asyncglk-ui-border: var(--vscode-editorWidget-border, var(--vscode-widget-border));
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--vscode-editor-background);
+  color: var(--vscode-editor-foreground);
+}
+
+#gameport {
+  position: absolute;
+  inset: 0;
+}
+
+/* A small reload control in the corner, so a freshly compiled story can be restarted. */
+#ie-player-toolbar {
+  position: fixed;
+  top: 6px;
+  right: 14px;
+  z-index: 1000;
+  display: flex;
+  gap: 6px;
+  opacity: 0.55;
+  transition: opacity 0.15s;
+}
+#ie-player-toolbar:hover {
+  opacity: 1;
+}
+#ie-player-toolbar button {
+  font: inherit;
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 3px;
+  border: 1px solid var(--vscode-button-border, transparent);
+  background: var(--vscode-button-secondaryBackground, #444);
+  color: var(--vscode-button-secondaryForeground, #fff);
+  cursor: pointer;
+}
+#ie-player-toolbar button:hover {
+  background: var(--vscode-button-secondaryHoverBackground, #555);
+}

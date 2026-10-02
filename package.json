@@ -1,0 +1,391 @@
+{
+  "name": "inform-ecosystem-vscode",
+  "displayName": "Inform Ecosystem",
+  "publisher": "jeffnyman",
+  "icon": "./inform.png",
+  "version": "0.1.0",
+  "description": "Language and tool support for the Inform ecosystem: Inform 7, Inform 6, Inweb, Intest and Preform.",
+  "license": "MIT",
+  "author": {
+    "name": "Jeff Nyman",
+    "email": "jeffnyman@gmail.com",
+    "url": "https://testerstories.com"
+  },
+  "galleryBanner": {
+    "color": "#303841",
+    "theme": "dark"
+  },
+  "homepage": "https://github.com/jeffnyman/inform-ecosystem-vscode/blob/main/README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jeffnyman/inform-ecosystem-vscode.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jeffnyman/inform-ecosystem-vscode/issues",
+    "email": "jeffnyman@gmail.com"
+  },
+  "engines": {
+    "vscode": "^1.98.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "keywords": [
+    "inform",
+    "inform7",
+    "inform6",
+    "inweb",
+    "intest",
+    "interactive fiction",
+    "text adventure"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "customEditors": [
+      {
+        "viewType": "informEcosystem.player",
+        "displayName": "Inform Story Player",
+        "priority": "default",
+        "selector": [
+          { "filenamePattern": "*.ulx" },
+          { "filenamePattern": "*.gblorb" },
+          { "filenamePattern": "*.glb" },
+          { "filenamePattern": "*.z3" },
+          { "filenamePattern": "*.z4" },
+          { "filenamePattern": "*.z5" },
+          { "filenamePattern": "*.z8" },
+          { "filenamePattern": "*.zblorb" },
+          { "filenamePattern": "*.zlb" }
+        ]
+      }
+    ],
+    "snippets": [
+      { "language": "inform7", "path": "./snippets/inform7.json" },
+      { "language": "inform7extension", "path": "./snippets/inform7.json" },
+      { "language": "inform6", "path": "./snippets/inform6.json" },
+      { "language": "inform6template", "path": "./snippets/inform6.json" }
+    ],
+    "commands": [
+      {
+        "command": "informEcosystem.compile",
+        "title": "Compile Project (debug build)",
+        "category": "Inform",
+        "icon": "$(run)"
+      },
+      {
+        "command": "informEcosystem.release",
+        "title": "Release Project",
+        "category": "Inform",
+        "icon": "$(package)"
+      },
+      {
+        "command": "informEcosystem.play",
+        "title": "Play Compiled Story",
+        "category": "Inform",
+        "icon": "$(play)"
+      },
+      {
+        "command": "informEcosystem.playExternal",
+        "title": "Play Compiled Story in External Interpreter",
+        "category": "Inform"
+      },
+      {
+        "command": "informEcosystem.compileInform6",
+        "title": "Compile Inform 6 File (debug build)",
+        "category": "Inform",
+        "icon": "$(run)"
+      },
+      {
+        "command": "informEcosystem.releaseInform6",
+        "title": "Compile Inform 6 File (release build)",
+        "category": "Inform",
+        "icon": "$(package)"
+      },
+      {
+        "command": "informEcosystem.showToolchain",
+        "title": "Show Compiler Locations",
+        "category": "Inform"
+      },
+      {
+        "command": "informEcosystem.verify",
+        "title": "Verify Inform Ecosystem",
+        "category": "Inform"
+      }
+    ],
+    "menus": {
+      "editor/title/run": [
+        {
+          "command": "informEcosystem.compile",
+          "when": "resourceLangId == inform7 || resourceLangId == inform7extension",
+          "group": "navigation@1"
+        },
+        {
+          "command": "informEcosystem.release",
+          "when": "resourceLangId == inform7 || resourceLangId == inform7extension",
+          "group": "navigation@2"
+        },
+        {
+          "command": "informEcosystem.play",
+          "when": "resourceLangId == inform7 || resourceLangId == inform7extension",
+          "group": "navigation@3"
+        },
+        {
+          "command": "informEcosystem.compileInform6",
+          "when": "resourceLangId == inform6",
+          "group": "navigation@1"
+        },
+        {
+          "command": "informEcosystem.releaseInform6",
+          "when": "resourceLangId == inform6",
+          "group": "navigation@2"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "informEcosystem.compile",
+          "when": "resourceLangId == inform7 || resourceExtname == .inform",
+          "group": "1_inform@1"
+        },
+        {
+          "command": "informEcosystem.release",
+          "when": "resourceLangId == inform7 || resourceExtname == .inform",
+          "group": "1_inform@2"
+        },
+        {
+          "command": "informEcosystem.compileInform6",
+          "when": "resourceLangId == inform6",
+          "group": "1_inform@1"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "informEcosystem.compileInform6",
+          "when": "resourceLangId == inform6"
+        },
+        {
+          "command": "informEcosystem.releaseInform6",
+          "when": "resourceLangId == inform6"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Inform Ecosystem",
+      "properties": {
+        "informEcosystem.compilersPath": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Folder containing the Inform tools (`inform7`, `inform6`, `inblorb`, ...). Leave empty to look for a `Windows-Inform7\\Build\\Compilers` folder near the workspace (as produced by inform-builder), an installed Inform IDE, or the PATH."
+        },
+        "informEcosystem.internalPath": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Inform's `Internal` resources folder, passed to `inform7 -internal`. Leave empty to use the one beside the compilers."
+        },
+        "informEcosystem.externalPath": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "The external folder holding your installed extensions, passed to `inform7 -external`. Leave empty to use `Documents/Inform` if it exists."
+        },
+        "informEcosystem.inform7.defaultFormat": {
+          "type": "string",
+          "enum": ["glulx", "z8"],
+          "default": "glulx",
+          "description": "Story file format for projects that have no Settings.plist from the IDE."
+        },
+        "informEcosystem.openStoryAfterCompile": {
+          "type": "string",
+          "enum": ["no", "editor", "external"],
+          "enumDescriptions": [
+            "Do nothing.",
+            "Play the story in an editor tab beside the source.",
+            "Open the story file with the application your system associates with it."
+          ],
+          "default": "editor",
+          "description": "What to do with the story file after a successful compile."
+        },
+        "informEcosystem.player.autosave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Let the player keep an autosave so a story resumes where it was when its tab is reopened."
+        },
+        "informEcosystem.player.reloadOnChange": {
+          "type": "boolean",
+          "default": true,
+          "description": "Restart the story in the player when its file changes on disk, for example after recompiling."
+        },
+        "informEcosystem.inform6.target": {
+          "type": "string",
+          "enum": ["glulx", "z5", "z8"],
+          "default": "glulx",
+          "description": "Virtual machine to target when compiling a stand-alone Inform 6 file."
+        },
+        "informEcosystem.inform6.includePath": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Value for `+include_path=` when compiling a stand-alone Inform 6 file, for example the folder holding the library `.h` files."
+        },
+        "informEcosystem.inform6.extraArguments": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [],
+          "description": "Additional arguments passed to inform6 when compiling a stand-alone Inform 6 file."
+        }
+      }
+    },
+    "problemMatchers": [
+      {
+        "name": "inform6",
+        "owner": "inform6",
+        "source": "inform6",
+        "fileLocation": ["autoDetect", "${workspaceFolder}"],
+        "pattern": {
+          "regexp": "^(.*)\\((\\d+)\\):\\s+(Error|Fatal error|Warning):\\s*(.*)$",
+          "file": 1,
+          "line": 2,
+          "severity": 3,
+          "message": 4
+        }
+      }
+    ],
+    "languages": [
+      {
+        "id": "inform7",
+        "aliases": ["Inform 7", "i7"],
+        "extensions": [".ni", ".i7"],
+        "icon": { "light": "./icons/i7-light.png", "dark": "./icons/i7-dark.png" },
+        "configuration": "./configs/i7-language-configuration.json"
+      },
+      {
+        "id": "inform7extension",
+        "aliases": ["Inform 7 Extension", "i7extension"],
+        "extensions": [".i7x"],
+        "icon": { "light": "./icons/i7x-light.png", "dark": "./icons/i7x-dark.png" },
+        "configuration": "./configs/i7ext-language-configuration.json"
+      },
+      {
+        "id": "inform6",
+        "aliases": ["Inform 6", "i6"],
+        "extensions": [".inf", ".h", ".i6", ".i6h"],
+        "icon": { "light": "./icons/i6-light.png", "dark": "./icons/i6-dark.png" },
+        "configuration": "./configs/i6-language-configuration.json"
+      },
+      {
+        "id": "inform6template",
+        "aliases": ["Inform 6 Template", "i6t"],
+        "extensions": [".i6t"],
+        "icon": { "light": "./icons/i6-light.png", "dark": "./icons/i6-dark.png" },
+        "configuration": "./configs/i6-language-configuration.json"
+      },
+      {
+        "id": "preform",
+        "aliases": ["Preform"],
+        "extensions": [".preform"],
+        "icon": { "light": "./icons/i7-light.png", "dark": "./icons/i7-dark.png" },
+        "configuration": "./configs/preform-language-configuration.json"
+      },
+      {
+        "id": "intest",
+        "aliases": ["Intest", "Delia"],
+        "extensions": [".intest"],
+        "icon": { "light": "./icons/intest-light.png", "dark": "./icons/intest-dark.png" },
+        "configuration": "./configs/intest-language-configuration.json"
+      },
+      {
+        "id": "inweb",
+        "aliases": ["Inweb"],
+        "extensions": [".inweb", ".w"],
+        "icon": { "light": "./icons/inweb-light.png", "dark": "./icons/inweb-dark.png" },
+        "configuration": "./configs/inweb-language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "inform7",
+        "scopeName": "source.inform7",
+        "path": "./syntaxes/inform7.tmLanguage.json",
+        "embeddedLanguages": {
+          "meta.embedded.inform6": "inform6",
+          "meta.embedded.preform": "preform",
+          "meta.embedded.js": "javascript"
+        }
+      },
+      {
+        "language": "inform7extension",
+        "scopeName": "source.inform7.extension",
+        "path": "./syntaxes/inform7extension.tmLanguage.json",
+        "embeddedLanguages": {
+          "meta.embedded.inform6": "inform6",
+          "meta.embedded.preform": "preform",
+          "meta.embedded.js": "javascript"
+        }
+      },
+      {
+        "language": "inform6",
+        "scopeName": "source.inform6",
+        "path": "./syntaxes/inform6.tmLanguage.json",
+        "embeddedLanguages": { "meta.embedded.js": "javascript" }
+      },
+      {
+        "language": "inform6template",
+        "scopeName": "source.inform6.template",
+        "path": "./syntaxes/inform6template.tmLanguage.json",
+        "embeddedLanguages": { "meta.embedded.js": "javascript" }
+      },
+      {
+        "language": "preform",
+        "scopeName": "source.preform",
+        "path": "./syntaxes/preform.tmLanguage.json"
+      },
+      {
+        "language": "intest",
+        "scopeName": "source.intest",
+        "path": "./syntaxes/intest.tmLanguage.json"
+      },
+      {
+        "language": "inweb",
+        "scopeName": "source.inweb",
+        "path": "./syntaxes/inweb.tmLanguage.json",
+        "embeddedLanguages": { "meta.embedded.block.c": "c" }
+      },
+      {
+        "scopeName": "informecosystem.inform6template.injection",
+        "path": "./syntaxes/inform6template.injection.json",
+        "injectTo": ["source.inform6.template"]
+      },
+      {
+        "scopeName": "informecosystem.inform7.inform6inclusion.injection",
+        "path": "./syntaxes/inform7.inform6inclusion.injection.json",
+        "injectTo": ["source.inform7", "source.inform7.extension"]
+      }
+    ]
+  },
+  "scripts": {
+    "fetch-parchment": "node scripts/fetch-parchment.mjs",
+    "build": "npm run fetch-parchment && npm run clean && npm run compile && npm run format && npm run lint && node esbuild.mjs",
+    "test": "npm run compile-tests && npx vscode-test",
+    "compile-tests": "npx tsc -p . --outDir out",
+    "compile": "npx tsc --noEmit",
+    "lint": "npx eslint src",
+    "check": "npx prettier src --check",
+    "format": "npx prettier src --write",
+    "clean": "npx rimraf dist"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.13.11",
+    "@types/sinon": "^17.0.4",
+    "@types/vscode": "^1.98.0",
+    "@typescript-eslint/eslint-plugin": "^8.27.0",
+    "@typescript-eslint/parser": "^8.27.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
+    "esbuild": "0.25.1",
+    "eslint": "^9.22.0",
+    "eslint-config-prettier": "^10.1.1",
+    "globals": "^16.0.0",
+    "prettier": "3.5.3",
+    "rimraf": "^6.0.1",
+    "sinon": "^19.0.4",
+    "typescript": "^5.8.2"
+  }
+}

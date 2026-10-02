@@ -1,0 +1,231 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "scopeName": "source.inweb",
+  "name": "Inweb",
+  "patterns": [
+    {
+      "include": "#sectionHeading"
+    },
+    {
+      "include": "#contentsField"
+    },
+    {
+      "include": "#namedParagraphDefinition"
+    },
+    {
+      "include": "#codeBlock"
+    },
+    {
+      "include": "#definition"
+    },
+    {
+      "include": "#enumeration"
+    },
+    {
+      "include": "#paragraph"
+    },
+    {
+      "include": "#commentary"
+    }
+  ],
+  "repository": {
+    "sectionHeading": {
+      "comment": "The first line of a section: [Namespace::] Section Title.",
+      "match": "^(\\[[A-Za-z_][A-Za-z0-9_]*::\\])\\s*(.*)$",
+      "captures": {
+        "1": {
+          "name": "entity.name.namespace.inweb"
+        },
+        "2": {
+          "name": "markup.heading.section.inweb"
+        }
+      }
+    },
+    "contentsField": {
+      "comment": "Contents.w metadata lines such as 'Title: inweb' or 'Chapter 1: Top Level'.",
+      "match": "^(Title|Author|Purpose|Language|Licen[cs]e|Version Name|Version Number|Import|Chapter \\d+|Preliminaries|Manual|Sections|Web Syntax Version|Build Number|Build Date|Prerelease|Semantic Version Number)(:)\\s*(.*)$",
+      "captures": {
+        "1": {
+          "name": "keyword.other.field.inweb"
+        },
+        "2": {
+          "name": "punctuation.separator.key-value.inweb"
+        },
+        "3": {
+          "name": "string.unquoted.field.value.inweb"
+        }
+      }
+    },
+    "paragraph": {
+      "comment": "Paragraph markers: @ starts an unnamed paragraph, @h a heading paragraph, @d a definition, @e an enumeration. The text after @h is a heading.",
+      "patterns": [
+        {
+          "match": "^(@h)\\s+(.*)$",
+          "captures": {
+            "1": {
+              "name": "keyword.control.paragraph.heading.inweb"
+            },
+            "2": {
+              "name": "markup.heading.paragraph.inweb"
+            }
+          }
+        },
+        {
+          "name": "keyword.control.paragraph.inweb",
+          "match": "^@(?=\\s|$)"
+        }
+      ]
+    },
+    "definition": {
+      "comment": "@d NAME value: a preprocessor-style definition.",
+      "match": "^(@d)\\s+([A-Za-z_][A-Za-z0-9_]*)(.*)$",
+      "captures": {
+        "1": {
+          "name": "keyword.control.paragraph.definition.inweb"
+        },
+        "2": {
+          "name": "entity.name.constant.inweb"
+        },
+        "3": {
+          "name": "meta.embedded.block.c",
+          "patterns": [
+            {
+              "include": "source.c"
+            }
+          ]
+        }
+      }
+    },
+    "enumeration": {
+      "comment": "@e NAME [from N]: an enumerated constant.",
+      "match": "^(@e)\\s+([A-Za-z_][A-Za-z0-9_]*)(?:\\s+(from)\\s+(\\d+))?",
+      "captures": {
+        "1": {
+          "name": "keyword.control.paragraph.enumeration.inweb"
+        },
+        "2": {
+          "name": "entity.name.constant.enumeration.inweb"
+        },
+        "3": {
+          "name": "keyword.other.from.inweb"
+        },
+        "4": {
+          "name": "constant.numeric.integer.inweb"
+        }
+      }
+    },
+    "namedParagraphDefinition": {
+      "comment": "@<Name@> = begins the code of a named paragraph, which runs until the next paragraph marker.",
+      "begin": "^(@<)([^@]*)(@>)\\s*(=)\\s*$",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.paragraph.begin.inweb"
+        },
+        "2": {
+          "name": "entity.name.section.paragraph.inweb"
+        },
+        "3": {
+          "name": "punctuation.definition.paragraph.end.inweb"
+        },
+        "4": {
+          "name": "keyword.operator.code.inweb"
+        }
+      },
+      "end": "(?=^@)",
+      "contentName": "meta.embedded.block.c",
+      "patterns": [
+        {
+          "include": "#code"
+        }
+      ]
+    },
+    "codeBlock": {
+      "comment": "A line holding only = (optionally with options in parentheses) switches from commentary to code until the next paragraph marker.",
+      "begin": "^(=)\\s*(\\(.*\\))?\\s*$",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.operator.code.inweb"
+        },
+        "2": {
+          "name": "meta.annotation.code.options.inweb"
+        }
+      },
+      "end": "(?=^@)",
+      "contentName": "meta.embedded.block.c",
+      "patterns": [
+        {
+          "include": "#code"
+        }
+      ]
+    },
+    "code": {
+      "comment": "Code is the web's language, C or InC by default, with Inweb's own additions: @<Name@> paragraph references and [[Field]] bibliographic substitutions.",
+      "patterns": [
+        {
+          "include": "#namedParagraphReference"
+        },
+        {
+          "include": "#bibliographicSubstitution"
+        },
+        {
+          "include": "source.c"
+        }
+      ]
+    },
+    "namedParagraphReference": {
+      "name": "meta.paragraph.reference.inweb",
+      "match": "(@<)([^@]*)(@>)",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.paragraph.begin.inweb"
+        },
+        "2": {
+          "name": "variable.other.paragraph.inweb"
+        },
+        "3": {
+          "name": "punctuation.definition.paragraph.end.inweb"
+        }
+      }
+    },
+    "bibliographicSubstitution": {
+      "comment": "[[Title]], [[Version Number]] and so on are replaced from the Contents page when tangling.",
+      "name": "variable.other.bibliographic.inweb",
+      "match": "\\[\\[[^\\]]+\\]\\]"
+    },
+    "commentary": {
+      "comment": "Everything else is commentary: prose with |inline code|, `inline code`, and paragraph references.",
+      "patterns": [
+        {
+          "name": "markup.inline.raw.inweb",
+          "match": "(\\|)[^|\\n]+(\\|)",
+          "captures": {
+            "1": {
+              "name": "punctuation.definition.raw.inweb"
+            },
+            "2": {
+              "name": "punctuation.definition.raw.inweb"
+            }
+          }
+        },
+        {
+          "name": "markup.inline.raw.inweb",
+          "match": "(`)[^`\\n]+(`)",
+          "captures": {
+            "1": {
+              "name": "punctuation.definition.raw.inweb"
+            },
+            "2": {
+              "name": "punctuation.definition.raw.inweb"
+            }
+          }
+        },
+        {
+          "include": "#namedParagraphReference"
+        },
+        {
+          "include": "#bibliographicSubstitution"
+        }
+      ]
+    }
+  }
+}

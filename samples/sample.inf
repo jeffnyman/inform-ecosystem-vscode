@@ -1,0 +1,66 @@
+!% -SD
+!% +include_path=lib
+! The Quendor Sampler: exercises the Inform 6 grammar. Not a playable game.
+
+Constant Story "INFORM 6 SAMPLER";
+Constant Headline "^A grammar test.^";
+Constant MAX_SCORE = 10;
+Constant HEX_VALUE = $FF;
+Constant BIN_VALUE = $$1010;
+Constant FLOAT_VALUE = $+1.5e3;
+
+Include "Parser";
+Include "VerbLib";
+
+Global counter = 0;
+Array buffer -> 120;
+Array table_data static --> 1 2 3;
+
+Attribute shiny;
+Property alias worn fancy;
+
+Class Treasure
+  with description "It glitters.",
+       before [;
+         Take: if (self has shiny) "Too dazzling.";
+       ],
+  has scenery;
+
+Object Vault "Vault"
+  with description "A low stone chamber. @00 lurks here. Unicode @{263A} and @@64.",
+       n_to Hall,
+  has light;
+
+Treasure -> ruby "ruby"
+  with name 'ruby' 'gem//p' 'red',
+       initial "A ruby lies here.";
+
+Object -> -> speck "speck of dust";
+
+[ Initialise;
+  location = Vault;
+  move ruby to Vault;
+  <<Look>>;
+  <Examine ruby>;
+  print "Welcome!^";
+  counter++;
+  if (counter == 1 && location ofclass Object) rtrue;
+  objectloop (x in Vault) give x ~shiny;
+  @set_cursor 1 1;
+  @aloadb buffer 0 sp;
+  style bold; print "Bold"; style roman;
+  VorpleExecuteJavaScriptCommand("console.log('hi')");
+  return ##Look;
+];
+
+Verb 'sample' * -> Sample;
+Extend 'take' first * 'all' -> Take;
+
+[ SampleSub; "Sampled."; ];
+
+#Ifdef TARGET_GLULX;
+[ HandleGlkEvent ev; ev = gg_event; ];
+#Endif;
+
+Nearby oldthing "old thing";
+Switches d;

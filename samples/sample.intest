@@ -1,0 +1,37 @@
+! Sample Intest script exercising the Intest grammar. Not a working test.
+-cases [Sampler] 'samples/Test Cases'
+-recipe [Sampler]
+
+	set: $I7 = inform7/Tangled/inform7
+	set: $WORKSPACE = ../intest/Workspace
+	set: $$GLOBAL_COUNT = 0
+
+	if: $CASE %c*-Z
+		set: $VM = Z
+	else
+		set: $VM = G
+	endif
+
+	ifdef: $VERBOSE
+		show: $CASE
+	endif
+
+	mkdir: $WORK/Transient
+	step: find $WORK/Transient -mindepth 1 -delete
+	copy: '$WORKSPACE/Samples/Small Cover.png' '$WORK/Example.materials/Small Cover.png'
+	extract: $WORK/Example.inform/Source/story.ni $VM
+
+	step: $I7 -internal inform7/Internal -project $WORK/Example.inform
+	or: 'failed to compile'
+
+	match text: $WORK/Example.inform/Build/Problems.html $PATH/_Results_Ideal/$CASE.html
+	or: 'problem report differs'
+
+	hash: $WORK/Example.inform/Build/auto.inf $HASHCODE
+	iffail: $HASHCODE
+		fail: 'no hash'
+	endif
+
+	pass: 'passed'
+
+-end

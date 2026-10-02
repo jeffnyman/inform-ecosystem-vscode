@@ -1,0 +1,17 @@
+language English
+
+[A sample Preform file, exercising the Preform grammar. Comments nest [like so].]
+
+<lamp-state> ::=
+	lit |
+	unlit |
+	<definite-article> ... ?1
+
+<definite-article> ::=
+	the/a/an |
+	\the
+
+<quantity> ::=
+	### of *** |
+	...... |
+	{to} ... _and ^not ...

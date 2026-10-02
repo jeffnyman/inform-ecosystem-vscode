@@ -1,0 +1,9 @@
+{
+  // Test-workspace settings for the Extension Development Host (F5 opens this folder).
+  // Point at the compilers produced by inform-builder's `python build.py integrate`.
+  "informEcosystem.compilersPath": "F:\\Projects\\_informing\\Windows-Inform7\\Build\\Compilers",
+  "informEcosystem.openStoryAfterCompile": "editor",
+  "files.exclude": {
+    "**/Build": false
+  }
+}

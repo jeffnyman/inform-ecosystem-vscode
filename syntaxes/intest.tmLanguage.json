@@ -1,0 +1,159 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "scopeName": "source.intest",
+  "name": "Intest",
+  "patterns": [
+    {
+      "include": "#comment"
+    },
+    {
+      "include": "#directive"
+    },
+    {
+      "include": "#conditional"
+    },
+    {
+      "include": "#command"
+    },
+    {
+      "include": "#string"
+    },
+    {
+      "include": "#variable"
+    },
+    {
+      "include": "#recipeName"
+    },
+    {
+      "include": "#wildcard"
+    }
+  ],
+  "repository": {
+    "comment": {
+      "name": "comment.line.bang.intest",
+      "match": "(!).*$",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.comment.intest"
+        }
+      }
+    },
+    "directive": {
+      "comment": "Top-level directives of a test script: where the cases are, which recipe applies, and so on.",
+      "match": "^\\s*(-cases|-recipe|-end|-if|-set|-annotated|-possible|-groups|-singular|-problems|-examples|-extensions|-extension|-bless|-rebless|-curse|-show|-test|-diff|-bbdiff|-verbose|-debug|-internal|-using|-no-history|-threads)\\b",
+      "captures": {
+        "1": {
+          "name": "keyword.other.directive.intest"
+        }
+      }
+    },
+    "conditional": {
+      "comment": "Delia control flow inside a recipe.",
+      "patterns": [
+        {
+          "match": "^\\s*(if|ifdef|ifndef|iffail|ifpass)(:)",
+          "captures": {
+            "1": {
+              "name": "keyword.control.conditional.intest"
+            },
+            "2": {
+              "name": "punctuation.separator.command.intest"
+            }
+          }
+        },
+        {
+          "name": "keyword.control.conditional.intest",
+          "match": "^\\s*(else|endif|fail|pass)\\b(?!:)"
+        }
+      ]
+    },
+    "command": {
+      "comment": "Delia recipe commands end with a colon: 'step: ...', 'set: $X = ...'. 'match' takes a kind of comparison before its colon.",
+      "patterns": [
+        {
+          "match": "^\\s*(match)\\s+(text|problem|platform|console|i7transcript|folder|binary|[a-z]+)(:)",
+          "captures": {
+            "1": {
+              "name": "support.function.command.intest"
+            },
+            "2": {
+              "name": "keyword.other.match.kind.intest"
+            },
+            "3": {
+              "name": "punctuation.separator.command.intest"
+            }
+          }
+        },
+        {
+          "match": "^\\s*(copy|command|debugger|default|exists|extract|hash|mkdir|or|pass|fail|remove|set|setquoted|show|step)(:)",
+          "captures": {
+            "1": {
+              "name": "support.function.command.intest"
+            },
+            "2": {
+              "name": "punctuation.separator.command.intest"
+            }
+          }
+        }
+      ]
+    },
+    "string": {
+      "comment": "Single quotes group text containing spaces.",
+      "name": "string.quoted.single.intest",
+      "begin": "'",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.definition.string.begin.intest"
+        }
+      },
+      "end": "'",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.string.end.intest"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#variable"
+        }
+      ]
+    },
+    "variable": {
+      "comment": "$NAME is a recipe-local variable; $$NAME is global to the whole run. $CASE, $PATH, $WORK and friends are supplied by Intest.",
+      "patterns": [
+        {
+          "name": "variable.other.global.intest",
+          "match": "\\$\\$[A-Za-z_][A-Za-z0-9_]*"
+        },
+        {
+          "name": "variable.language.intest",
+          "match": "\\$(CASE|PATH|WORK|TITLE|TYPE|SCRIPT|CASEDIR|TEMPLATE|HASHCODE)\\b"
+        },
+        {
+          "name": "variable.other.local.intest",
+          "match": "\\$[A-Za-z_][A-Za-z0-9_]*"
+        }
+      ]
+    },
+    "recipeName": {
+      "comment": "[Name] after -cases or -recipe identifies a recipe.",
+      "match": "(\\[)([^\\]]+)(\\])",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.recipe.begin.intest"
+        },
+        "2": {
+          "name": "entity.name.function.recipe.intest"
+        },
+        "3": {
+          "name": "punctuation.definition.recipe.end.intest"
+        }
+      }
+    },
+    "wildcard": {
+      "comment": "Pattern wildcards used in conditions and matches: %c* and %d* and so on.",
+      "name": "constant.character.wildcard.intest",
+      "match": "%[a-z]\\*?"
+    }
+  }
+}

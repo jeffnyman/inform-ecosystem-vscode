@@ -1,0 +1,17 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "scopeName": "informecosystem.inform6template.injection",
+  "injectionSelector": "L:source.inform6.template",
+  "patterns": [
+    {
+      "include": "#variableInclusion"
+    }
+  ],
+  "repository": {
+    "variableInclusion": {
+      "comment": "{name} in a template is a value spliced in by Inform 7 when the template is used.",
+      "name": "variable.other.inclusion.inform6.template",
+      "match": "(?<!\\\\centerline)\\{[^'\\s\"\\{\\\\][^\"\\{\\\\]*?\\}"
+    }
+  }
+}

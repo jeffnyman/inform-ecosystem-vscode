@@ -1,0 +1,193 @@
+{
+  "Room": {
+    "prefix": "room",
+    "body": [
+      "${1:The Kitchen} is a room. \"${2:A description of the room.}\"",
+      "$0"
+    ],
+    "description": "A room with a description"
+  },
+  "Room with direction": {
+    "prefix": "roomdir",
+    "body": [
+      "${1:The Garden} is ${2|north,south,east,west,northeast,northwest,southeast,southwest,up,down,inside,outside|} of ${3:the Kitchen}. \"${4:A description of the room.}\"",
+      "$0"
+    ],
+    "description": "A room placed in a direction from another"
+  },
+  "Thing": {
+    "prefix": "thing",
+    "body": [
+      "${1:The lamp} is ${2|a thing,a device,a container,a supporter,a door,a person,a backdrop,scenery|} in ${3:the Kitchen}. The description is \"${4:A description.}\"",
+      "$0"
+    ],
+    "description": "A thing (or other kind) in a room, with a description"
+  },
+  "Instead rule": {
+    "prefix": "instead",
+    "body": ["Instead of ${1:taking the lamp}:", "\t${2:say \"Not now.\"}", "$0"],
+    "description": "An Instead rule"
+  },
+  "Before rule": {
+    "prefix": "before",
+    "body": ["Before ${1:taking the lamp}:", "\t$0"],
+    "description": "A Before rule"
+  },
+  "After rule": {
+    "prefix": "after",
+    "body": ["After ${1:taking the lamp}:", "\t$0"],
+    "description": "An After rule"
+  },
+  "Check rule": {
+    "prefix": "check",
+    "body": [
+      "Check ${1:an actor sampling} (this is the ${2:can't sample without a thing} rule):",
+      "\t$0"
+    ],
+    "description": "A named Check rule for an action"
+  },
+  "Carry out rule": {
+    "prefix": "carryout",
+    "body": ["Carry out ${1:an actor sampling}:", "\t$0"],
+    "description": "A Carry out rule"
+  },
+  "Report rule": {
+    "prefix": "report",
+    "body": ["Report ${1:an actor sampling}:", "\tsay \"${2:Done.}\"", "$0"],
+    "description": "A Report rule"
+  },
+  "Every turn": {
+    "prefix": "everyturn",
+    "body": ["Every turn${1: when the player is in the Kitchen}:", "\t$0"],
+    "description": "An Every turn rule"
+  },
+  "When play begins": {
+    "prefix": "playbegins",
+    "body": ["When play begins:", "\t$0"],
+    "description": "A When play begins rule"
+  },
+  "When play ends": {
+    "prefix": "playends",
+    "body": ["When play ends:", "\t$0"],
+    "description": "A When play ends rule"
+  },
+  "New action": {
+    "prefix": "action",
+    "body": [
+      "${1:Sampling} is an action applying to ${2|nothing,one thing,one visible thing,one touchable thing,two things,one carried thing,one topic,one number|}.",
+      "Understand \"${3:sample} [something]\" as ${4:sampling}.",
+      "",
+      "Check ${4:sampling}:",
+      "\t$0",
+      "",
+      "Carry out ${4:sampling}:",
+      "\t",
+      "",
+      "Report ${4:sampling}:",
+      "\tsay \"Done.\""
+    ],
+    "description": "A new action with grammar and Check, Carry out and Report rules"
+  },
+  "Understand": {
+    "prefix": "understand",
+    "body": ["Understand \"${1:word}\" as ${2:the lamp}.", "$0"],
+    "description": "Understand a word or phrase as something"
+  },
+  "To phrase": {
+    "prefix": "to",
+    "body": ["To ${1:do something}${2: (N - a number)}:", "\t$0"],
+    "description": "Define a phrase"
+  },
+  "To say": {
+    "prefix": "tosay",
+    "body": ["To say ${1:something}:", "\tsay \"${2:text}\"$0"],
+    "description": "Define a text substitution"
+  },
+  "To decide": {
+    "prefix": "todecide",
+    "body": [
+      "To decide ${1|whether,which number is,what number is,which object is|} ${2:condition}:",
+      "\t${3:decide yes}$0"
+    ],
+    "description": "Define a phrase that decides a value or a condition"
+  },
+  "If / otherwise": {
+    "prefix": "if",
+    "body": ["if ${1:condition}:", "\t$0", "otherwise:", "\t"],
+    "description": "An if/otherwise block"
+  },
+  "Repeat": {
+    "prefix": "repeat",
+    "body": ["repeat with ${1:item} running through ${2:things in the location}:", "\t$0"],
+    "description": "A repeat loop"
+  },
+  "Say with substitution": {
+    "prefix": "say",
+    "body": ["say \"${1:text} [${2:the noun}]${3:.}\"$0"],
+    "description": "Say text with a substitution"
+  },
+  "Table": {
+    "prefix": "table",
+    "body": [
+      "Table of ${1:Things}",
+      "${2:name}\t${3:value}",
+      "${4:\"example\"}\t${5:1}",
+      "$0"
+    ],
+    "description": "A table with one column pair and one row"
+  },
+  "Scene": {
+    "prefix": "scene",
+    "body": [
+      "${1:The Chase} is a scene. ${1:The Chase} begins when ${2:the player is in the Garden}.",
+      "${1:The Chase} ends when ${3:the player is not in the Garden}.",
+      "",
+      "When ${1:The Chase} begins:",
+      "\t$0"
+    ],
+    "description": "A scene with begin and end conditions"
+  },
+  "Kind": {
+    "prefix": "kind",
+    "body": [
+      "${1:A gem} is a kind of ${2|thing,container,supporter,device,person,room,door|}. ${1:A gem} ${3:can be polished or dull}.",
+      "$0"
+    ],
+    "description": "A new kind with a property"
+  },
+  "Include extension": {
+    "prefix": "include",
+    "body": ["Include ${1:Basic Screen Effects} by ${2:Emily Short}.", "$0"],
+    "description": "Include an extension"
+  },
+  "Heading": {
+    "prefix": "heading",
+    "body": ["${1|Volume,Book,Part,Chapter,Section|} ${2:1} - ${3:Title}", "", "$0"],
+    "description": "A heading line"
+  },
+  "Test me": {
+    "prefix": "testme",
+    "body": ["Test me with \"${1:look / take lamp}\".", "$0"],
+    "description": "A test script"
+  },
+  "Inform 6 inclusion": {
+    "prefix": "i6",
+    "body": ["Include (-", "\t$0", "-).", ""],
+    "description": "Include raw Inform 6 code"
+  },
+  "Inform 6 phrase": {
+    "prefix": "i6phrase",
+    "body": ["To ${1:do something}: (- ${2:Routine()}; -).", "$0"],
+    "description": "A phrase implemented in Inform 6"
+  },
+  "Release": {
+    "prefix": "release",
+    "body": ["Release along with ${1|an interpreter,cover art,a website,the source text,a file of \"Name\" called \"file.txt\"|}.", "$0"],
+    "description": "A release instruction"
+  },
+  "Use option": {
+    "prefix": "use",
+    "body": ["Use ${1|American dialect,scoring,no scoring,the serial comma,full-length room descriptions,brief room descriptions,undo prevention,memory economy|}.", "$0"],
+    "description": "A Use option"
+  }
+}

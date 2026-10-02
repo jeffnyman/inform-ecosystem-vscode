@@ -1,0 +1,128 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "scopeName": "source.inform7.extension",
+  "name": "Inform 7 Extension",
+  "patterns": [
+    {
+      "include": "#title"
+    },
+    {
+      "include": "#body"
+    }
+  ],
+  "repository": {
+    "title": {
+      "begin": "^.*$",
+      "beginCaptures": {
+        "0": {
+          "name": "markup.heading.title.extension.inform7 markup.underline.title.extension.inform7"
+        }
+      },
+      "end": "$END",
+      "patterns": [
+        {
+          "include": "#rubric"
+        },
+        {
+          "include": "#body"
+        }
+      ]
+    },
+    "rubric": {
+      "begin": "^\"[^\"]*\"$",
+      "beginCaptures": {
+        "0": {
+          "name": "markup.heading.rubric.extension.inform7 markup.italic.rubric.extension.inform7"
+        }
+      },
+      "end": "$END",
+      "patterns": [
+        {
+          "include": "#credits"
+        },
+        {
+          "include": "#body"
+        }
+      ]
+    },
+    "credits": {
+      "begin": "^\"[^\"]*\"$",
+      "beginCaptures": {
+        "0": {
+          "name": "markup.heading.credits.extension.inform7 markup.italic.credits.extension.inform7"
+        }
+      },
+      "end": "$END",
+      "patterns": [
+        {
+          "include": "#body"
+        }
+      ]
+    },
+    "body": {
+      "patterns": [
+        {
+          "include": "source.inform7#body"
+        },
+        {
+          "include": "#end"
+        },
+        {
+          "include": "#documentation"
+        }
+      ]
+    },
+    "end": {
+      "name": "markup.heading.end.extension.inform7 markup.underline.end.extension.inform7",
+      "match": "^[^\"\\[\\]]+ ends? here.$"
+    },
+    "documentation": {
+      "begin": "(?i)^\\s*(----\\s+documentation\\s+----).*$",
+      "beginCaptures": {
+        "1": {
+          "name": "markup.heading.documentation.extension.inform7"
+        }
+      },
+      "end": "$END",
+      "patterns": [
+        {
+          "include": "source.inform7#comment"
+        },
+        {
+          "include": "source.inform7#text"
+        },
+        {
+          "include": "#documentationHeading"
+        },
+        {
+          "include": "#documentationExample"
+        }
+      ]
+    },
+    "documentationHeading": {
+      "patterns": [
+        {
+          "name": "markup.heading.documentation.heading.extension.inform7",
+          "match": "(?i)^\\s*(part|chapter|section): .*$"
+        },
+        {
+          "name": "markup.heading.documentation.example.extension.inform7",
+          "match": "(?i)^Example: +\\*{1,4} +[^-]+ +- +.*$"
+        }
+      ]
+    },
+    "documentationExample": {
+      "begin": "(?=^\\t+)",
+      "end": "$",
+      "patterns": [
+        {
+          "name": "keyword.control.extension.inform7",
+          "match": "\\*:"
+        },
+        {
+          "include": "source.inform7#body"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "scopeName": "source.preform",
+  "name": "Preform",
+  "patterns": [
+    {
+      "include": "#comment"
+    },
+    {
+      "include": "#keyword"
+    },
+    {
+      "include": "#nonterminal"
+    }
+  ],
+  "repository": {
+    "comment": {
+      "comment": "Preform comments are in square brackets, like Inform 7's, and nest.",
+      "name": "comment.block.preform",
+      "begin": "\\[",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.definition.comment.begin.preform"
+        }
+      },
+      "end": "\\]",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.comment.end.preform"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#nestedComment"
+        }
+      ]
+    },
+    "nestedComment": {
+      "begin": "\\[",
+      "end": "\\]",
+      "patterns": [
+        {
+          "include": "#nestedComment"
+        }
+      ]
+    },
+    "keyword": {
+      "patterns": [
+        {
+          "name": "keyword.control.language.preform",
+          "match": "^language\\b"
+        },
+        {
+          "name": "keyword.operator.definition.preform",
+          "match": "::="
+        },
+        {
+          "name": "keyword.operator.alternative.preform",
+          "match": "\\|"
+        },
+        {
+          "comment": "A ?n after a nonterminal or brace group sets a production's ordering.",
+          "name": "keyword.operator.order.preform",
+          "match": "(?<=>|})\\?\\d"
+        }
+      ]
+    },
+    "nonterminal": {
+      "patterns": [
+        {
+          "comment": "A nonterminal being defined, at the start of a line.",
+          "name": "entity.name.function.nonterminal.preform",
+          "match": "^<[a-z][a-z0-9-]+[a-z0-9]>"
+        },
+        {
+          "name": "constant.character.escape.preform",
+          "match": "\\\\[_^{}\\\\]"
+        },
+        {
+          "name": "constant.character.escape.preform",
+          "match": "\\\\[^\\s\\|]+(?=\\s|\\|)"
+        },
+        {
+          "comment": "A slash joins alternative words: the/a/an.",
+          "name": "keyword.operator.alternative.word.preform",
+          "match": "/"
+        },
+        {
+          "comment": "A leading underscore marks a word that must appear literally and is not part of the matched text: _and, _or.",
+          "name": "string.other.literal.word.preform",
+          "match": "\\b_[a-z]+\\b"
+        },
+        {
+          "comment": "^ negates: the following word must not appear.",
+          "name": "keyword.operator.negation.preform",
+          "match": "\\^"
+        },
+        {
+          "comment": "Braces capture the matched text: {to}, {called}.",
+          "name": "variable.other.capture.preform",
+          "match": "\\{[^}]*\\}"
+        },
+        {
+          "comment": "A nonterminal used in a production.",
+          "name": "variable.other.nonterminal.preform",
+          "match": "<[a-z][a-z0-9-]+[a-z0-9]>"
+        },
+        {
+          "comment": "Wildcards: ### one word, *** any words, ... any text, ...... any text including punctuation.",
+          "name": "support.variable.wildcard.preform",
+          "match": "(?<=\\s)(###|\\*{3}|\\.{6}|\\.{3})(?=\\s)"
+        }
+      ]
+    }
+  }
+}

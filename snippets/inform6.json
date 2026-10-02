@@ -1,0 +1,164 @@
+{
+  "Routine": {
+    "prefix": ["routine", "function"],
+    "body": ["[ ${1:Name}${2: arg};", "\t$0", "];"],
+    "description": "A routine"
+  },
+  "Embedded routine": {
+    "prefix": ["embedded", "method"],
+    "body": ["${1|before,after,describe,initial,each_turn,daemon,life,react_before,react_after,orders,parse_name|} [;", "\t$0", "],"],
+    "description": "A routine embedded as an object property"
+  },
+  "Object": {
+    "prefix": "object",
+    "body": [
+      "Object ${1:-> }${2:name} \"${3:short name}\"",
+      "  with description \"${4:A description.}\",",
+      "       name '${5:word}',",
+      "  has ${6:scenery};",
+      "$0"
+    ],
+    "description": "An object with description, name and attributes"
+  },
+  "Room": {
+    "prefix": "room",
+    "body": [
+      "Object ${1:Kitchen} \"${2:Kitchen}\"",
+      "  with description \"${3:A description.}\",",
+      "       ${4:n_to} ${5:Hall},",
+      "  has light;",
+      "$0"
+    ],
+    "description": "A room object with a map connection"
+  },
+  "Class": {
+    "prefix": "class",
+    "body": ["Class ${1:Name}", "  with ${2:description \"A description.\"},", "  has ${3:scenery};", "$0"],
+    "description": "A class definition"
+  },
+  "Verb": {
+    "prefix": "verb",
+    "body": ["Verb '${1:word}'", "\t* ${2:noun} -> ${3:Action};", "$0"],
+    "description": "A verb grammar"
+  },
+  "Extend": {
+    "prefix": "extend",
+    "body": ["Extend '${1:take}' ${2|first,last,only|}", "\t* ${3:noun} -> ${4:Action};", "$0"],
+    "description": "Extend an existing verb's grammar"
+  },
+  "Action routine": {
+    "prefix": "actionsub",
+    "body": ["[ ${1:Name}Sub;", "\t\"${2:Done.}\";", "];", "$0"],
+    "description": "An action routine, NameSub"
+  },
+  "Constant": {
+    "prefix": "constant",
+    "body": ["Constant ${1:NAME} = ${2:value};", "$0"],
+    "description": "A constant"
+  },
+  "Global": {
+    "prefix": "global",
+    "body": ["Global ${1:name} = ${2:0};", "$0"],
+    "description": "A global variable"
+  },
+  "Array": {
+    "prefix": "array",
+    "body": ["Array ${1:name} ${2|-->,->,table,buffer,string|} ${3:size};", "$0"],
+    "description": "An array"
+  },
+  "Include": {
+    "prefix": "include",
+    "body": ["Include \"${1|Parser,VerbLib,Grammar|}\";", "$0"],
+    "description": "Include a library file"
+  },
+  "Story header": {
+    "prefix": "story",
+    "body": [
+      "!% -SD",
+      "Constant Story \"${1:TITLE}\";",
+      "Constant Headline \"^${2:An Interactive Fiction}^\";",
+      "",
+      "Include \"Parser\";",
+      "Include \"VerbLib\";",
+      "",
+      "[ Initialise;",
+      "\tlocation = ${3:Kitchen};",
+      "\t\"^^${4:Welcome.}^\";",
+      "];",
+      "",
+      "Include \"Grammar\";",
+      "$0"
+    ],
+    "description": "A minimal story file skeleton using the standard library"
+  },
+  "If": {
+    "prefix": "if",
+    "body": ["if (${1:condition}) {", "\t$0", "}"],
+    "description": "An if statement"
+  },
+  "If / else": {
+    "prefix": "ifelse",
+    "body": ["if (${1:condition}) {", "\t$0", "} else {", "\t", "}"],
+    "description": "An if/else statement"
+  },
+  "Switch": {
+    "prefix": "switch",
+    "body": ["switch (${1:value}) {", "\t${2:1}: $0", "\tdefault: ", "}"],
+    "description": "A switch statement"
+  },
+  "For": {
+    "prefix": "for",
+    "body": ["for (${1:i} = ${2:0} : ${1:i} < ${3:max} : ${1:i}++) {", "\t$0", "}"],
+    "description": "A for loop"
+  },
+  "While": {
+    "prefix": "while",
+    "body": ["while (${1:condition}) {", "\t$0", "}"],
+    "description": "A while loop"
+  },
+  "Do until": {
+    "prefix": "dountil",
+    "body": ["do {", "\t$0", "} until (${1:condition});"],
+    "description": "A do/until loop"
+  },
+  "Objectloop": {
+    "prefix": "objectloop",
+    "body": ["objectloop (${1:x} ${2|in,ofclass,has,provides|} ${3:location}) {", "\t$0", "}"],
+    "description": "Loop over objects"
+  },
+  "Move to": {
+    "prefix": "moveto",
+    "body": ["move ${1:object} to ${2:destination};$0"],
+    "description": "Move an object"
+  },
+  "Action": {
+    "prefix": "actionstmt",
+    "body": ["<${1:Look}${2: noun}>;$0"],
+    "description": "Run an action: <Action noun>"
+  },
+  "Action and return": {
+    "prefix": "actionret",
+    "body": ["<<${1:Look}${2: noun}>>;$0"],
+    "description": "Run an action and return true: <<Action noun>>"
+  },
+  "Style": {
+    "prefix": "style",
+    "body": ["style ${1|bold,underline,reverse,fixed|}; ${2:print \"text\";} style roman;$0"],
+    "description": "Print in a text style, then restore"
+  },
+  "Print": {
+    "prefix": "print",
+    "body": ["print \"${1:text}^\";$0"],
+    "description": "Print text with a newline"
+  },
+  "Print and return": {
+    "prefix": "printret",
+    "body": ["print_ret \"${1:text}\";$0"],
+    "description": "Print text with a newline and return true"
+  },
+  "Ifdef Glulx": {
+    "prefix": "ifglulx",
+    "body": ["#Ifdef TARGET_GLULX;", "\t$0", "#Ifnot;", "\t", "#Endif;"],
+    "description": "Conditional compilation for Glulx versus Z-machine"
+  }
+}

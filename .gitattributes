@@ -1,0 +1,43 @@
+# Establish project-wide standard of LF line endings.
+* text=auto eol=lf
+
+# Binary files (binary is a macro for -text -diff).
+*.jpg binary
+*.png binary
+
+# Treat SVG files as normalized text instead of binary.
+*.svg text
+
+# Handle Windows specific files.
+*.bat text eol=crlf
+
+# Handle display in diffs and patches.
+*.js   whitespace=-blank-at-eof,-space-before-tab,-tab-in-indent,trailing-space,tabwidth=2
+*.ts   whitespace=-blank-at-eof,-space-before-tab,-tab-in-indent,trailing-space,tabwidth=2
+*.json whitespace=-blank-at-eof,-space-before-tab,-tab-in-indent,trailing-space,tabwidth=2
+
+# Linguist mappings.
+*.js      linguist-language=TypeScript
+**/*.json linguist-language=jsonc
+
+# Ignores for language statistics.
+package-lock.json linguist-vendored
+yarn.lock         linguist-vendored
+
+# Conflict resolution.
+package-lock.json merge=ours
+yarn.lock         merge=ours
+
+# Export exclusions for archive.
+eslint.config.mjs export-ignore
+esbuild.mjs       export-ignore
+.vscode-test.mjs  export-ignore
+.vscodeignore     export-ignore
+.editorconfig     export-ignore
+.gitattributes    export-ignore
+.gitignore        export-ignore
+.prettierrc       export-ignore
+.vscode-test/     export-ignore
+.vscode/          export-ignore
+dist/             export-ignore
+out/              export-ignore

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "scopeName": "informecosystem.inform7.inform6inclusion.injection",
+  "injectionSelector": "L:meta.embedded.inform6",
+  "patterns": [
+    {
+      "include": "#paragraphDivision"
+    },
+    {
+      "include": "#variableInclusion"
+    },
+    {
+      "include": "#inform7Inclusion"
+    }
+  ],
+  "repository": {
+    "paragraphDivision": {
+      "comment": "Template paragraph markers make no sense inside an Inform 7 source's (- -) inclusion.",
+      "name": "invalid.illegal.paragraph.inform6.template",
+      "match": "^@.*$"
+    },
+    "variableInclusion": {
+      "name": "variable.other.inclusion.inform6.template",
+      "match": "\\{[^'\\s\"\\{\\\\][^\"\\{\\\\]*?\\}"
+    },
+    "inform7Inclusion": {
+      "comment": "(+ ... +) inside Inform 6 refers back to an Inform 7 value.",
+      "name": "variable.other.inform7.inclusion.inform6",
+      "match": "\\(\\+.*?\\+\\)"
+    }
+  }
+}

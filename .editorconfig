@@ -1,0 +1,27 @@
+# Root file for the project.
+root = true
+
+# Global settings for all files.
+charset = utf-8
+indent_style = space
+indent_size = 2
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Batch files use CRLF line endings.
+[*.bat]
+end_of_line = crlf
+
+# Markdown files might have deliberate ending spaces.
+[*.md]
+trim_trailing_whitespace = false
+
+# JavaScript-specific settings.
+[*.{js.ts}]
+quote_type = double
+continuation_indent_size = 2
+curly_bracket_next_line = false
+spaces_around_operators = true
+spaces_around_brackets = true
+insert_final_semi = true

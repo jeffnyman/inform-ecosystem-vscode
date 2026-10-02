@@ -1,0 +1,19 @@
+B/sampt: Sample Template.
+
+@Purpose: A tiny template exercising the Inform 6 template grammar.
+
+@-------------------------------------------------------------------------------
+
+@p Introduction.
+This paragraph is commentary with |code words| and $math$ and \centerline{a centred line}.
+Values like {MAX_SCORE} are spliced in by Inform 7.
+
+@c
+[ SampleTemplateRoutine x;
+  ! Ordinary Inform 6 inside a code paragraph.
+  print (string) {NAME_STRING}, "^";
+  return x + 1;
+];
+
+@p Another paragraph.
+With {\it italic} text.
