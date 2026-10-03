@@ -5,7 +5,11 @@ following the [Keep a Changelog](http://keepachangelog.com/) conventions.
 
 ## [Unreleased]
 
-Fresh start, consolidating the earlier Quendor and Inform Ecosystem prototypes.
+Nothing yet.
+
+## [0.1.0] - 2026-10-03
+
+First release on the Visual Studio Marketplace. A fresh start, consolidating the earlier Quendor and Inform Ecosystem prototypes.
 
 - Syntax highlighting for Inform 7 source and extensions, Inform 6 source and
   `.i6t` templates, Preform, Intest recipes and Inweb webs.
