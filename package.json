@@ -47,23 +47,53 @@
         "displayName": "Inform Story Player",
         "priority": "default",
         "selector": [
-          { "filenamePattern": "*.ulx" },
-          { "filenamePattern": "*.gblorb" },
-          { "filenamePattern": "*.glb" },
-          { "filenamePattern": "*.z3" },
-          { "filenamePattern": "*.z4" },
-          { "filenamePattern": "*.z5" },
-          { "filenamePattern": "*.z8" },
-          { "filenamePattern": "*.zblorb" },
-          { "filenamePattern": "*.zlb" }
+          {
+            "filenamePattern": "*.ulx"
+          },
+          {
+            "filenamePattern": "*.gblorb"
+          },
+          {
+            "filenamePattern": "*.glb"
+          },
+          {
+            "filenamePattern": "*.z3"
+          },
+          {
+            "filenamePattern": "*.z4"
+          },
+          {
+            "filenamePattern": "*.z5"
+          },
+          {
+            "filenamePattern": "*.z8"
+          },
+          {
+            "filenamePattern": "*.zblorb"
+          },
+          {
+            "filenamePattern": "*.zlb"
+          }
         ]
       }
     ],
     "snippets": [
-      { "language": "inform7", "path": "./snippets/inform7.json" },
-      { "language": "inform7extension", "path": "./snippets/inform7.json" },
-      { "language": "inform6", "path": "./snippets/inform6.json" },
-      { "language": "inform6template", "path": "./snippets/inform6.json" }
+      {
+        "language": "inform7",
+        "path": "./snippets/inform7.json"
+      },
+      {
+        "language": "inform7extension",
+        "path": "./snippets/inform7.json"
+      },
+      {
+        "language": "inform6",
+        "path": "./snippets/inform6.json"
+      },
+      {
+        "language": "inform6template",
+        "path": "./snippets/inform6.json"
+      }
     ],
     "commands": [
       {
@@ -104,6 +134,11 @@
       {
         "command": "informEcosystem.showToolchain",
         "title": "Show Compiler Locations",
+        "category": "Inform"
+      },
+      {
+        "command": "informEcosystem.chooseCompilersPath",
+        "title": "Choose Compilers Folder...",
         "category": "Inform"
       },
       {
@@ -188,13 +223,20 @@
         },
         "informEcosystem.inform7.defaultFormat": {
           "type": "string",
-          "enum": ["glulx", "z8"],
+          "enum": [
+            "glulx",
+            "z8"
+          ],
           "default": "glulx",
           "description": "Story file format for projects that have no Settings.plist from the IDE."
         },
         "informEcosystem.openStoryAfterCompile": {
           "type": "string",
-          "enum": ["no", "editor", "external"],
+          "enum": [
+            "no",
+            "editor",
+            "external"
+          ],
           "enumDescriptions": [
             "Do nothing.",
             "Play the story in an editor tab beside the source.",
@@ -215,7 +257,11 @@
         },
         "informEcosystem.inform6.target": {
           "type": "string",
-          "enum": ["glulx", "z5", "z8"],
+          "enum": [
+            "glulx",
+            "z5",
+            "z8"
+          ],
           "default": "glulx",
           "description": "Virtual machine to target when compiling a stand-alone Inform 6 file."
         },
@@ -226,7 +272,9 @@
         },
         "informEcosystem.inform6.extraArguments": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "default": [],
           "description": "Additional arguments passed to inform6 when compiling a stand-alone Inform 6 file."
         }
@@ -237,7 +285,10 @@
         "name": "inform6",
         "owner": "inform6",
         "source": "inform6",
-        "fileLocation": ["autoDetect", "${workspaceFolder}"],
+        "fileLocation": [
+          "autoDetect",
+          "${workspaceFolder}"
+        ],
         "pattern": {
           "regexp": "^(.*)\\((\\d+)\\):\\s+(Error|Fatal error|Warning):\\s*(.*)$",
           "file": 1,
@@ -250,51 +301,110 @@
     "languages": [
       {
         "id": "inform7",
-        "aliases": ["Inform 7", "i7"],
-        "extensions": [".ni", ".i7"],
-        "icon": { "light": "./icons/i7-light.png", "dark": "./icons/i7-dark.png" },
+        "aliases": [
+          "Inform 7",
+          "i7"
+        ],
+        "extensions": [
+          ".ni",
+          ".i7"
+        ],
+        "icon": {
+          "light": "./icons/i7-light.png",
+          "dark": "./icons/i7-dark.png"
+        },
         "configuration": "./configs/i7-language-configuration.json"
       },
       {
         "id": "inform7extension",
-        "aliases": ["Inform 7 Extension", "i7extension"],
-        "extensions": [".i7x"],
-        "icon": { "light": "./icons/i7x-light.png", "dark": "./icons/i7x-dark.png" },
+        "aliases": [
+          "Inform 7 Extension",
+          "i7extension"
+        ],
+        "extensions": [
+          ".i7x"
+        ],
+        "icon": {
+          "light": "./icons/i7x-light.png",
+          "dark": "./icons/i7x-dark.png"
+        },
         "configuration": "./configs/i7ext-language-configuration.json"
       },
       {
         "id": "inform6",
-        "aliases": ["Inform 6", "i6"],
-        "extensions": [".inf", ".h", ".i6", ".i6h"],
-        "icon": { "light": "./icons/i6-light.png", "dark": "./icons/i6-dark.png" },
+        "aliases": [
+          "Inform 6",
+          "i6"
+        ],
+        "extensions": [
+          ".inf",
+          ".h",
+          ".i6",
+          ".i6h"
+        ],
+        "icon": {
+          "light": "./icons/i6-light.png",
+          "dark": "./icons/i6-dark.png"
+        },
         "configuration": "./configs/i6-language-configuration.json"
       },
       {
         "id": "inform6template",
-        "aliases": ["Inform 6 Template", "i6t"],
-        "extensions": [".i6t"],
-        "icon": { "light": "./icons/i6-light.png", "dark": "./icons/i6-dark.png" },
+        "aliases": [
+          "Inform 6 Template",
+          "i6t"
+        ],
+        "extensions": [
+          ".i6t"
+        ],
+        "icon": {
+          "light": "./icons/i6-light.png",
+          "dark": "./icons/i6-dark.png"
+        },
         "configuration": "./configs/i6-language-configuration.json"
       },
       {
         "id": "preform",
-        "aliases": ["Preform"],
-        "extensions": [".preform"],
-        "icon": { "light": "./icons/i7-light.png", "dark": "./icons/i7-dark.png" },
+        "aliases": [
+          "Preform"
+        ],
+        "extensions": [
+          ".preform"
+        ],
+        "icon": {
+          "light": "./icons/i7-light.png",
+          "dark": "./icons/i7-dark.png"
+        },
         "configuration": "./configs/preform-language-configuration.json"
       },
       {
         "id": "intest",
-        "aliases": ["Intest", "Delia"],
-        "extensions": [".intest"],
-        "icon": { "light": "./icons/intest-light.png", "dark": "./icons/intest-dark.png" },
+        "aliases": [
+          "Intest",
+          "Delia"
+        ],
+        "extensions": [
+          ".intest"
+        ],
+        "icon": {
+          "light": "./icons/intest-light.png",
+          "dark": "./icons/intest-dark.png"
+        },
         "configuration": "./configs/intest-language-configuration.json"
       },
       {
         "id": "inweb",
-        "aliases": ["Inweb"],
-        "extensions": [".inweb", ".w"],
-        "icon": { "light": "./icons/inweb-light.png", "dark": "./icons/inweb-dark.png" },
+        "aliases": [
+          "Inweb"
+        ],
+        "extensions": [
+          ".inweb",
+          ".w"
+        ],
+        "icon": {
+          "light": "./icons/inweb-light.png",
+          "dark": "./icons/inweb-dark.png"
+        },
         "configuration": "./configs/inweb-language-configuration.json"
       }
     ],
@@ -323,13 +433,17 @@
         "language": "inform6",
         "scopeName": "source.inform6",
         "path": "./syntaxes/inform6.tmLanguage.json",
-        "embeddedLanguages": { "meta.embedded.js": "javascript" }
+        "embeddedLanguages": {
+          "meta.embedded.js": "javascript"
+        }
       },
       {
         "language": "inform6template",
         "scopeName": "source.inform6.template",
         "path": "./syntaxes/inform6template.tmLanguage.json",
-        "embeddedLanguages": { "meta.embedded.js": "javascript" }
+        "embeddedLanguages": {
+          "meta.embedded.js": "javascript"
+        }
       },
       {
         "language": "preform",
@@ -345,21 +459,30 @@
         "language": "inweb",
         "scopeName": "source.inweb",
         "path": "./syntaxes/inweb.tmLanguage.json",
-        "embeddedLanguages": { "meta.embedded.block.c": "c" }
+        "embeddedLanguages": {
+          "meta.embedded.block.c": "c"
+        }
       },
       {
         "scopeName": "informecosystem.inform6template.injection",
         "path": "./syntaxes/inform6template.injection.json",
-        "injectTo": ["source.inform6.template"]
+        "injectTo": [
+          "source.inform6.template"
+        ]
       },
       {
         "scopeName": "informecosystem.inform7.inform6inclusion.injection",
         "path": "./syntaxes/inform7.inform6inclusion.injection.json",
-        "injectTo": ["source.inform7", "source.inform7.extension"]
+        "injectTo": [
+          "source.inform7",
+          "source.inform7.extension"
+        ]
       }
     ]
   },
   "scripts": {
+    "vscode:prepublish": "npm run build",
+    "package": "npx @vscode/vsce package",
     "fetch-parchment": "node scripts/fetch-parchment.mjs",
     "build": "npm run fetch-parchment && npm run clean && npm run compile && npm run format && npm run lint && node esbuild.mjs",
     "test": "npm run compile-tests && npx vscode-test",
@@ -379,6 +502,7 @@
     "@typescript-eslint/parser": "^8.27.0",
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.4.1",
+    "@vscode/vsce": "^4.0.0",
     "esbuild": "0.25.1",
     "eslint": "^9.22.0",
     "eslint-config-prettier": "^10.1.1",

@@ -100,13 +100,7 @@ async function pickProject(): Promise<Project | undefined> {
 async function compileProject(release: boolean) {
   const toolchain = locateToolchain();
   if (!toolchain) {
-    const open = "Open Settings";
-    if ((await vscode.window.showErrorMessage(NOT_FOUND_HELP, open)) === open) {
-      vscode.commands.executeCommand(
-        "workbench.action.openSettings",
-        "informEcosystem.compilersPath",
-      );
-    }
+    await offerToLocateCompilers();
     return;
   }
   const project = await pickProject();
@@ -326,6 +320,61 @@ async function compileInform6File(release: boolean) {
 
 // --- Misc --------------------------------------------------------------------
 
+/** The compilers were not found: offer a folder picker, or the setting itself. */
+async function offerToLocateCompilers() {
+  const choose = "Choose Folder...";
+  const open = "Open Settings";
+  const answer = await vscode.window.showErrorMessage(
+    NOT_FOUND_HELP,
+    choose,
+    open,
+  );
+  if (answer === choose) {
+    await chooseCompilersPath();
+  } else if (answer === open) {
+    vscode.commands.executeCommand(
+      "workbench.action.openSettings",
+      "informEcosystem.compilersPath",
+    );
+  }
+}
+
+/**
+ * VS Code's Settings editor has no folder picker, so this command is the way
+ * to point the extension at a Compilers folder by browsing. It writes the
+ * user-level setting and then reports what was found.
+ */
+async function chooseCompilersPath() {
+  const picked = await vscode.window.showOpenDialog({
+    canSelectFiles: false,
+    canSelectFolders: true,
+    canSelectMany: false,
+    openLabel: "Use this Compilers folder",
+    title: "Choose the folder containing inform7, inform6 and inblorb",
+  });
+  if (!picked || picked.length === 0) {
+    return;
+  }
+  const dir = picked[0].fsPath;
+  const exe = process.platform === "win32" ? ".exe" : "";
+  if (!fs.existsSync(path.join(dir, "inform7" + exe))) {
+    const anyway = "Use it anyway";
+    const answer = await vscode.window.showWarningMessage(
+      `No inform7${exe} in ${dir}.`,
+      anyway,
+    );
+    if (answer !== anyway) {
+      return;
+    }
+  }
+  await config().update(
+    "compilersPath",
+    dir,
+    vscode.ConfigurationTarget.Global,
+  );
+  showToolchain();
+}
+
 function showToolchain() {
   const out = outputChannel();
   out.show(true);
@@ -420,6 +469,10 @@ export function registerCompileCommands(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand(
       "informEcosystem.showToolchain",
       showToolchain,
+    ),
+    vscode.commands.registerCommand(
+      "informEcosystem.chooseCompilersPath",
+      chooseCompilersPath,
     ),
   );
 }

@@ -75,7 +75,7 @@ A bare project folder with only `Source/story.ni` works; the `uuid.txt` that
 The extension does not bundle compilers. It looks, in order, at the
 `informEcosystem.compilersPath` setting, the `INFORM_COMPILERS` environment
 variable, a `Windows-Inform7\Build\Compilers` folder near the workspace (the
-layout produced by [inform-builder](../inform-builder)), an installed Inform IDE
+layout produced by the companion inform-builder project), an installed Inform IDE
 (`Program Files\Inform\Compilers` on Windows, `Inform.app` on macOS), and the
 PATH. The `Internal` folder is taken from `informEcosystem.internalPath` or
 found beside the compilers.
