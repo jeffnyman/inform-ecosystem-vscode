@@ -18,3 +18,18 @@ Thumbs.db
 
 # Third-party interpreter bundle, fetched by `npm run fetch-parchment` (pinned in scripts/fetch-parchment.mjs).
 webview/parchment/
+
+# Output that inform7 and inform6 write when the sample project is compiled
+# from the test window. Only Source/story.ni and uuid.txt are the project.
+samples/**/*.inform/.gitignore
+samples/**/*.inform/Build/
+samples/**/*.inform/Index/
+samples/**/*.inform/manifest.plist
+samples/**/*.inform/Metadata.iFiction
+samples/**/*.inform/Release.blurb
+samples/**/*.inform/notes.rtf
+samples/*.materials/
+samples/*.ulx
+samples/*.z[358]
+samples/*.gblorb
+samples/*.zblorb
