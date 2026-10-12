@@ -158,23 +158,29 @@
         "icon": "$(book)"
       },
       {
-        "command": "informEcosystem.docsBack",
+        "command": "informEcosystem.openIndex",
+        "title": "Open Index",
+        "category": "Inform",
+        "icon": "$(list-tree)"
+      },
+      {
+        "command": "informEcosystem.pageBack",
         "title": "Back",
-        "category": "Inform Documentation",
+        "category": "Inform",
         "icon": "$(arrow-left)",
-        "enablement": "informEcosystem.docsCanGoBack"
+        "enablement": "informEcosystem.pageCanGoBack"
       },
       {
-        "command": "informEcosystem.docsForward",
+        "command": "informEcosystem.pageForward",
         "title": "Forward",
-        "category": "Inform Documentation",
+        "category": "Inform",
         "icon": "$(arrow-right)",
-        "enablement": "informEcosystem.docsCanGoForward"
+        "enablement": "informEcosystem.pageCanGoForward"
       },
       {
-        "command": "informEcosystem.docsContents",
+        "command": "informEcosystem.pageGoTo",
         "title": "Go to...",
-        "category": "Inform Documentation",
+        "category": "Inform",
         "icon": "$(list-unordered)"
       },
       {
@@ -191,18 +197,23 @@
           "group": "navigation@90"
         },
         {
-          "command": "informEcosystem.docsBack",
-          "when": "activeWebviewPanelId == 'informEcosystem.docs'",
+          "command": "informEcosystem.openIndex",
+          "when": "resourceLangId == inform7",
+          "group": "navigation@91"
+        },
+        {
+          "command": "informEcosystem.pageBack",
+          "when": "activeWebviewPanelId == 'informEcosystem.docs' || activeWebviewPanelId == 'informEcosystem.index'",
           "group": "navigation@1"
         },
         {
-          "command": "informEcosystem.docsForward",
-          "when": "activeWebviewPanelId == 'informEcosystem.docs'",
+          "command": "informEcosystem.pageForward",
+          "when": "activeWebviewPanelId == 'informEcosystem.docs' || activeWebviewPanelId == 'informEcosystem.index'",
           "group": "navigation@2"
         },
         {
-          "command": "informEcosystem.docsContents",
-          "when": "activeWebviewPanelId == 'informEcosystem.docs'",
+          "command": "informEcosystem.pageGoTo",
+          "when": "activeWebviewPanelId == 'informEcosystem.docs' || activeWebviewPanelId == 'informEcosystem.index'",
           "group": "navigation@3"
         }
       ],
@@ -252,16 +263,16 @@
       ],
       "commandPalette": [
         {
-          "command": "informEcosystem.docsBack",
-          "when": "activeWebviewPanelId == 'informEcosystem.docs'"
+          "command": "informEcosystem.pageBack",
+          "when": "activeWebviewPanelId == 'informEcosystem.docs' || activeWebviewPanelId == 'informEcosystem.index'"
         },
         {
-          "command": "informEcosystem.docsForward",
-          "when": "activeWebviewPanelId == 'informEcosystem.docs'"
+          "command": "informEcosystem.pageForward",
+          "when": "activeWebviewPanelId == 'informEcosystem.docs' || activeWebviewPanelId == 'informEcosystem.index'"
         },
         {
-          "command": "informEcosystem.docsContents",
-          "when": "activeWebviewPanelId == 'informEcosystem.docs'"
+          "command": "informEcosystem.pageGoTo",
+          "when": "activeWebviewPanelId == 'informEcosystem.docs' || activeWebviewPanelId == 'informEcosystem.index'"
         },
         {
           "command": "informEcosystem.compileInform6",
@@ -275,16 +286,16 @@
     },
     "keybindings": [
       {
-        "command": "informEcosystem.docsBack",
+        "command": "informEcosystem.pageBack",
         "key": "alt+left",
         "mac": "cmd+[",
-        "when": "activeWebviewPanelId == 'informEcosystem.docs'"
+        "when": "activeWebviewPanelId == 'informEcosystem.docs' || activeWebviewPanelId == 'informEcosystem.index'"
       },
       {
-        "command": "informEcosystem.docsForward",
+        "command": "informEcosystem.pageForward",
         "key": "alt+right",
         "mac": "cmd+]",
-        "when": "activeWebviewPanelId == 'informEcosystem.docs'"
+        "when": "activeWebviewPanelId == 'informEcosystem.docs' || activeWebviewPanelId == 'informEcosystem.index'"
       }
     ],
     "configuration": {

@@ -2,6 +2,7 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import * as vscode from "vscode";
 
+import { PagePanel, Site } from "../common/pages";
 import { installedToolchains } from "../compile/download";
 import { locateToolchain } from "../compile/tools";
 
@@ -19,21 +20,18 @@ import { locateToolchain } from "../compile/tools";
  *     own inform: scheme (inform:/doc_images/...).
  *
  * Either way the image paths, some of them inside the pages' own scripts,
- * are relative to the documentation folder. A webview cannot follow links
- * between local pages, so each page is read here, those paths pointed at the
- * webview's resource URIs, and a small script added that sends link clicks
- * back to the extension. The example "paste" buttons call
- * window.Project.pasteCode, the IDE's hook; the script provides that hook and
- * the code is pasted into the Inform source editor.
+ * are relative to the documentation folder, and are pointed there.
  */
 export const DOCS_VIEW_TYPE = "informEcosystem.docs";
 
 const ONLINE = "https://ganelson.github.io/inform-website/book/WI_1_1.html";
 
-interface Layout {
+export interface Layout {
   /** The page that identifies the layout, and opens first. */
   home: string;
   contents: { label: string; page: string }[];
+  /** The page for the IDE's name of a section, docN.html or RdocN.html. */
+  section(root: string, name: string): string | undefined;
 }
 
 const LAYOUTS: Layout[] = [
@@ -50,6 +48,16 @@ const LAYOUTS: Layout[] = [
       { label: "Examples (numerical)", page: "book/examples_numerical.html" },
       { label: "Examples (thematic)", page: "book/examples_thematic.html" },
     ],
+    // docN is the Nth section of Writing with Inform in reading order, and
+    // RdocN of the Recipe Book: WI_1_1, WI_1_2, ..., WI_2_1, ...
+    section(root, name) {
+      const m = /^(R?)doc(\d+)\.html$/.exec(name);
+      if (!m) {
+        return undefined;
+      }
+      const page = sections(root, m[1] ? "RB" : "WI")[Number(m[2]) - 1];
+      return page && `book/${page}`;
+    },
   },
   {
     home: "index.html",
@@ -62,8 +70,32 @@ const LAYOUTS: Layout[] = [
       { label: "Examples (numerical)", page: "allegs.html" },
       { label: "Examples (thematic)", page: "Rallegs.html" },
     ],
+    section: (_root, name) => name,
   },
 ];
+
+const sectionLists = new Map<string, string[]>();
+
+/** The WI_c_s.html or RB_c_s.html pages of a book folder, in reading order. */
+function sections(root: string, book: "WI" | "RB"): string[] {
+  const key = `${root}|${book}`;
+  let list = sectionLists.get(key);
+  if (!list) {
+    const pattern = new RegExp(`^${book}_(\\d+)_(\\d+)\\.html$`);
+    list = fs
+      .readdirSync(path.join(root, "book"))
+      .map((f) => ({ f, m: pattern.exec(f) }))
+      .filter((x) => x.m)
+      .sort(
+        (a, b) =>
+          Number(a.m![1]) - Number(b.m![1]) ||
+          Number(a.m![2]) - Number(b.m![2]),
+      )
+      .map((x) => x.f);
+    sectionLists.set(key, list);
+  }
+  return list;
+}
 
 export interface Documentation {
   root: string;
@@ -113,300 +145,24 @@ export function findDocumentation(): Documentation | undefined {
   return undefined;
 }
 
-/** Paste code escapes characters as [=0xNNNN=]; turn them back. */
-export function decodePasteCode(code: string): string {
-  return code.replace(/\[=0x([0-9A-Fa-f]{4})=\]/g, (_, hex: string) =>
-    String.fromCharCode(parseInt(hex, 16)),
-  );
-}
-
-/**
- * Runs inside each page, ahead of the page's own scripts.
- *
- * Clicks are handled in the bubbling phase, so the pages' own onclick
- * handlers (showing and hiding examples) run first, and propagation stops at
- * the document so VS Code's handler on the window never sees them: it would
- * try to open book links as files and cancel javascript: links.
- */
-function pageScript(hash: string): string {
-  return `(function () {
-  var vscode = acquireVsCodeApi();
-  var hash = ${JSON.stringify(hash).replace(/</g, "\\u003c")};
-  window.Project = {
-    selectView: function () {},
-    pasteCode: function (code) { vscode.postMessage({ type: "paste", code: String(code) }); },
-    // Example links in the Windows IDE's pages; not supported yet.
-    createNewProject: function () {}
+function site(docs: Documentation): Site {
+  return {
+    viewType: DOCS_VIEW_TYPE,
+    title: "Inform Documentation",
+    root: docs.root,
+    resourceRoots: [docs.root],
+    home: docs.layout.home,
+    contents: docs.layout.contents,
+    rewrite: (html, uri) => {
+      const root = uri(docs.root);
+      return html
+        .replace(/(["'])\/assets\//g, `$1${root}/assets/`)
+        .replace(/(["'])inform:\//g, `$1${root}/`);
+    },
   };
-  function scrollTo(id) {
-    var target = document.getElementById(id) || document.getElementsByName(id)[0];
-    if (target) { target.scrollIntoView(); }
-  }
-  if (hash) {
-    // The page's own onload opens the example named in location.hash.
-    try { history.replaceState(null, "", "#" + hash); } catch (e) {}
-    window.addEventListener("load", function () { scrollTo(hash); });
-  }
-  document.addEventListener("click", function (event) {
-    var link = event.target && event.target.closest && event.target.closest("a[href]");
-    if (!link) { return; }
-    event.stopPropagation();
-    var href = link.getAttribute("href");
-    if (/^javascript:/i.test(href) || event.defaultPrevented) { return; }
-    event.preventDefault();
-    if (href.charAt(0) === "#") {
-      // With a <base>, the browser would resolve this against the book folder.
-      scrollTo(decodeURIComponent(href.slice(1)));
-    } else if (/^https?:/i.test(href)) {
-      vscode.postMessage({ type: "external", url: href });
-    } else if (!/^[a-z][a-z0-9+.-]*:/i.test(href)) {
-      vscode.postMessage({ type: "navigate", href: href });
-    }
-  });
-  window.addEventListener("mouseup", function (event) {
-    if (event.button === 3) { vscode.postMessage({ type: "back" }); }
-    if (event.button === 4) { vscode.postMessage({ type: "forward" }); }
-  });
-})();`;
 }
 
-/**
- * Make a documentation page displayable in the webview: a content security
- * policy, a base for its relative links, our script, and its image paths
- * (in attributes and in its scripts alike), /assets/... in the website's
- * layout and inform:/... in the Windows IDE's, pointed into the
- * documentation folder.
- */
-export function preparePage(
-  html: string,
-  page: { baseUri: string; rootUri: string; cspSource: string; hash: string },
-): string {
-  // The pages' scripts are inline, and so are their onclick handlers and
-  // javascript: links; they are local files from the toolchain.
-  const csp = [
-    "default-src 'none'",
-    `img-src ${page.cspSource} data:`,
-    `style-src ${page.cspSource} 'unsafe-inline'`,
-    `font-src ${page.cspSource}`,
-    "script-src 'unsafe-inline'",
-  ].join("; ");
-  // VS Code styles every webview from the colour theme: text in the editor's
-  // foreground colour, links in its link colour, blockquotes tinted. The
-  // pages are white paper that sets no body text colour, so in a dark theme
-  // their text came out light gray on white. Put back a browser's defaults;
-  // the pages' own stylesheet, which follows, still has the last word.
-  const defaults =
-    "body { color: #000000; }" +
-    " a, a:hover { color: #0000ee; }" +
-    " blockquote { background: transparent; border-color: transparent; }";
-  const head =
-    `\n<meta http-equiv="Content-Security-Policy" content="${csp}">` +
-    `\n<base href="${page.baseUri}/">` +
-    `\n<style>${defaults}</style>` +
-    `\n<script>${pageScript(page.hash)}</script>`;
-  return html
-    .replace(/(["'])\/assets\//g, `$1${page.rootUri}/assets/`)
-    .replace(/(["'])inform:\//g, `$1${page.rootUri}/`)
-    .replace(/<head[^>]*>/i, (tag) => tag + head);
-}
-
-class DocsViewer {
-  private static current: DocsViewer | undefined;
-
-  /** Pages visited, as paths relative to the documentation folder, with any #fragment. */
-  private history: string[] = [];
-  private position = -1;
-
-  private constructor(
-    private readonly panel: vscode.WebviewPanel,
-    private readonly docs: Documentation,
-  ) {
-    panel.webview.onDidReceiveMessage((message) => this.receive(message));
-    panel.onDidChangeViewState(() => this.updateContext());
-    panel.onDidDispose(() => {
-      if (DocsViewer.current === this) {
-        DocsViewer.current = undefined;
-        this.updateContext();
-      }
-    });
-  }
-
-  static show(docs: Documentation) {
-    if (DocsViewer.current && DocsViewer.current.docs.root !== docs.root) {
-      // Its onDidDispose may not have run by the time we go on.
-      const old = DocsViewer.current;
-      DocsViewer.current = undefined;
-      old.panel.dispose();
-    }
-    if (!DocsViewer.current) {
-      const panel = vscode.window.createWebviewPanel(
-        DOCS_VIEW_TYPE,
-        "Inform Documentation",
-        { viewColumn: vscode.ViewColumn.Beside, preserveFocus: false },
-        {
-          enableScripts: true,
-          enableFindWidget: true,
-          retainContextWhenHidden: true,
-          localResourceRoots: [vscode.Uri.file(docs.root)],
-        },
-      );
-      DocsViewer.current = new DocsViewer(panel, docs);
-    } else {
-      DocsViewer.current.panel.reveal();
-    }
-    DocsViewer.current.go(docs.layout.home);
-  }
-
-  static back() {
-    DocsViewer.current?.step(-1);
-  }
-
-  static forward() {
-    DocsViewer.current?.step(1);
-  }
-
-  static async contents() {
-    const viewer = DocsViewer.current;
-    if (!viewer) {
-      return;
-    }
-    const choice = await vscode.window.showQuickPick(
-      viewer.docs.layout.contents,
-      { placeHolder: "Go to" },
-    );
-    if (choice) {
-      viewer.go(choice.page);
-    }
-  }
-
-  private go(page: string) {
-    this.history.splice(this.position + 1, Infinity, page);
-    this.position = this.history.length - 1;
-    this.render();
-  }
-
-  private step(delta: number) {
-    const next = this.position + delta;
-    if (next >= 0 && next < this.history.length) {
-      this.position = next;
-      this.render();
-    }
-  }
-
-  private render() {
-    const [page, hash = ""] = this.history[this.position].split("#");
-    const file = path.join(this.docs.root, page);
-    let html: string;
-    try {
-      html = fs.readFileSync(file, "utf8");
-    } catch {
-      vscode.window.showErrorMessage(`Documentation page not found: ${file}`);
-      return;
-    }
-    const webview = this.panel.webview;
-    const uri = (rel: string) =>
-      webview.asWebviewUri(vscode.Uri.file(path.join(this.docs.root, rel)));
-    this.panel.webview.html = preparePage(html, {
-      baseUri: uri(path.dirname(page)).toString(),
-      rootUri: uri(".").toString(),
-      cspSource: webview.cspSource,
-      hash,
-    });
-    const title = /<title>([^<]*)<\/title>/i.exec(html)?.[1].trim();
-    this.panel.title = title || "Inform Documentation";
-    this.updateContext();
-  }
-
-  private async receive(message: {
-    type?: string;
-    href?: string;
-    url?: string;
-    code?: string;
-  }) {
-    switch (message?.type) {
-      case "navigate":
-        this.follow(String(message.href));
-        break;
-      case "external":
-        if (/^https?:/i.test(String(message.url))) {
-          vscode.env.openExternal(vscode.Uri.parse(String(message.url)));
-        }
-        break;
-      case "paste":
-        await pasteIntoSource(decodePasteCode(String(message.code)));
-        break;
-      case "back":
-        this.step(-1);
-        break;
-      case "forward":
-        this.step(1);
-        break;
-    }
-  }
-
-  /** A link relative to the current page; only pages inside the documentation. */
-  private follow(href: string) {
-    const [target, hash] = href.split("#");
-    const current = this.history[this.position].split("#")[0];
-    let page: string;
-    try {
-      page = path.posix.normalize(
-        path.posix.join(path.posix.dirname(current), decodeURI(target)),
-      );
-    } catch {
-      return;
-    }
-    if (page.startsWith("..") || !/\.html?$/i.test(page)) {
-      return;
-    }
-    this.go(hash ? `${page}#${hash}` : page);
-  }
-
-  private updateContext() {
-    const active = DocsViewer.current === this && this.panel.active;
-    vscode.commands.executeCommand(
-      "setContext",
-      "informEcosystem.docsCanGoBack",
-      active && this.position > 0,
-    );
-    vscode.commands.executeCommand(
-      "setContext",
-      "informEcosystem.docsCanGoForward",
-      active && this.position < this.history.length - 1,
-    );
-  }
-}
-
-// The Inform source editor last used, to paste examples into while the
-// documentation panel has the focus.
-let lastSourceEditor: vscode.TextEditor | undefined;
-
-function isInformSource(editor: vscode.TextEditor | undefined) {
-  return (
-    !!editor &&
-    ["inform7", "inform7extension"].includes(editor.document.languageId)
-  );
-}
-
-/** Paste at the cursor of the Inform source, replacing any selection, and show it. */
-export async function pasteIntoSource(code: string) {
-  const target =
-    (lastSourceEditor && !lastSourceEditor.document.isClosed
-      ? lastSourceEditor
-      : undefined) ?? vscode.window.visibleTextEditors.find(isInformSource);
-  if (!target) {
-    vscode.window.showWarningMessage(
-      "Open an Inform 7 source file to paste the example into.",
-    );
-    return;
-  }
-  const editor = await vscode.window.showTextDocument(
-    target.document,
-    target.viewColumn,
-  );
-  await editor.edit((edit) => edit.replace(editor.selection, code));
-}
-
+/** Open the documentation, offering a download or the online copy if there is none. */
 async function openDocumentation() {
   let docs = findDocumentation();
   if (!docs) {
@@ -425,32 +181,39 @@ async function openDocumentation() {
     }
   }
   if (docs) {
-    DocsViewer.show(docs);
+    PagePanel.open(site(docs));
   }
 }
 
-export function registerDocs(context: vscode.ExtensionContext) {
-  if (isInformSource(vscode.window.activeTextEditor)) {
-    lastSourceEditor = vscode.window.activeTextEditor;
+/**
+ * Open the documentation at a section named the IDE's way, docN.html or
+ * RdocN.html (with any #fragment), as the Index links to it. The panel goes
+ * in the given column, or stays where it is if already open.
+ */
+export function openDocumentationPage(
+  name: string,
+  column?: vscode.ViewColumn,
+): boolean {
+  const docs = findDocumentation();
+  const [file, hash] = name.split("#");
+  const page = docs && docs.layout.section(docs.root, file);
+  if (!docs || !page || !fs.existsSync(path.join(docs.root, page))) {
+    return false;
   }
+  const open = PagePanel.get(DOCS_VIEW_TYPE);
+  PagePanel.open(
+    site(docs),
+    hash ? `${page}#${hash}` : page,
+    open?.panel.viewColumn ?? column,
+  );
+  return true;
+}
+
+export function registerDocs(context: vscode.ExtensionContext) {
   context.subscriptions.push(
-    vscode.window.onDidChangeActiveTextEditor((editor) => {
-      if (isInformSource(editor)) {
-        lastSourceEditor = editor;
-      }
-    }),
     vscode.commands.registerCommand(
       "informEcosystem.openDocs",
       openDocumentation,
-    ),
-    vscode.commands.registerCommand("informEcosystem.docsBack", () =>
-      DocsViewer.back(),
-    ),
-    vscode.commands.registerCommand("informEcosystem.docsForward", () =>
-      DocsViewer.forward(),
-    ),
-    vscode.commands.registerCommand("informEcosystem.docsContents", () =>
-      DocsViewer.contents(),
     ),
   );
 }

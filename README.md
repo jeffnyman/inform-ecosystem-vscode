@@ -109,6 +109,24 @@ If none is found, the extension offers to download the compilers or to open
 the online copy instead. The IDE's "create a new project from this example"
 links are not supported yet.
 
+## The Index
+
+**Inform: Open Index** (the tree button in the title bar of an Inform 7 file)
+shows the Index that Inform writes into the project on every compile: Welcome,
+Contents, Actions, Kinds, Phrasebook, Rules, Scenes and World, through
+**Go to...** in the panel's title bar, with the same Back and Forward as the
+documentation. It reloads when you recompile. Within it:
+
+- the paste buttons insert the phrase or rule at the cursor of your source;
+- links to a line of the source open the source there, with the line selected;
+- the blue "?" links open that section of the documentation, in either the
+  Windows IDE's or the downloaded compilers' copy;
+- the boxes that show and hide parts of a page work as in the IDE.
+
+The Index's images come from Inform's own folders, so they need the
+documentation or the downloaded compilers. Links to extension documentation
+are not supported yet.
+
 ## Playing stories in VS Code
 
 Story files open in a player tab: `.ulx` and `.gblorb` (Glulx), and `.z3`,

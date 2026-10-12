@@ -65,7 +65,7 @@ function publish(
 
 // --- Finding the project -----------------------------------------------------
 
-async function pickProject(): Promise<Project | undefined> {
+export async function pickProject(): Promise<Project | undefined> {
   const defaultFormat = config().get<Format>("inform7.defaultFormat", "glulx");
   const active = vscode.window.activeTextEditor?.document.uri.fsPath;
   const fromEditor = active && findProjectDir(active);

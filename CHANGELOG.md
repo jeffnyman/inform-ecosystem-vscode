@@ -5,6 +5,12 @@ following the [Keep a Changelog](http://keepachangelog.com/) conventions.
 
 ## [Unreleased]
 
+- "Inform: Open Index" shows the project's Index beside the source, reloading
+  after each compile. Paste buttons paste into the source, source links open
+  the source at the line, and documentation links open the documentation
+  panel at that section, in either documentation layout.
+- Back, Forward and Go to... are shared by the documentation and Index
+  panels.
 - On Windows, an Inform IDE installed outside Program Files is found through
   the uninstall entry its installer writes in the registry.
 - The documentation viewer also reads the Windows IDE's documentation, which
