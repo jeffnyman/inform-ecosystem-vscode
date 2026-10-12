@@ -105,7 +105,7 @@ function pageScript(search: string, hash: string): string {
 
 /**
  * Make a page displayable in the webview: a content security policy, a base
- * for its relative resources, readable colours, our script, and the pages'
+ * for its relative resources, body colours to suit it, our script, and the pages'
  * navigation through window.location and their reading of location.search
  * redirected to it.
  */
@@ -125,13 +125,23 @@ export function preparePage(
   // VS Code styles every webview from the colour theme: a transparent body
   // over the editor's background, text in the editor's foreground colour,
   // links in its link colour, blockquotes tinted. The pages were made for the
-  // IDE's white window: the documentation sets a white background but no text
-  // colour (light gray on white in a dark theme), the Index neither (the
-  // editor's dark background showed through). Put back a browser's defaults;
-  // the pages' own styles, which follow, still have the last word.
-  const defaults =
+  // IDE's window, which supplies the body's colours. Supply them here; the
+  // pages' own styles, which follow, still have the last word.
+  //
+  // The documentation is light only: black on white, whatever the theme.
+  // The Index has a dark design of its own, under prefers-color-scheme:
+  // dark, which a webview in a dark theme matches. It leaves plain text to
+  // the body too, so give it white on the dark background its design uses,
+  // and the theme's link colour, which suits a dark page as blue does not.
+  const light =
     "body { color: #000000; background-color: #ffffff; }" +
-    " a, a:hover { color: #0000ee; }" +
+    " a, a:hover { color: #0000ee; }";
+  const defaults =
+    (/prefers-color-scheme\s*:\s*dark/.test(html)
+      ? `@media (prefers-color-scheme: light) { ${light} }` +
+        " @media (prefers-color-scheme: dark) {" +
+        " body { color: #ffffff; background-color: #121212; } }"
+      : light) +
     " blockquote { background: transparent; border-color: transparent; }";
   const head =
     `\n<meta http-equiv="Content-Security-Policy" content="${csp}">` +

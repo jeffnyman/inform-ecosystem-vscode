@@ -88,6 +88,21 @@ describe("Pages", function () {
     assert.ok(!html.includes("e3</script>"), "the fragment must be escaped");
   });
 
+  it("leaves a page with its own dark design dark in a dark theme", () => {
+    const html = preparePage(
+      `<html><head><style>@media (prefers-color-scheme: dark) { :root { --x: #000; } }</style></head></html>`,
+      { baseUri: "B", cspSource: "S", search: "", hash: "" },
+    );
+    assert.match(
+      html,
+      /@media \(prefers-color-scheme: light\) \{ body \{ color: #000000; background-color: #ffffff; \}/,
+    );
+    assert.match(
+      html,
+      /@media \(prefers-color-scheme: dark\) \{ body \{ color: #ffffff; background-color: #121212; \} \}/,
+    );
+  });
+
   it("pastes code at the cursor of the Inform source", async () => {
     const document = await vscode.workspace.openTextDocument({
       language: "inform7",
