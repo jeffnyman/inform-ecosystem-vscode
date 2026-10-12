@@ -5,6 +5,13 @@ following the [Keep a Changelog](http://keepachangelog.com/) conventions.
 
 ## [Unreleased]
 
+- Testing: each `Test me with "..."` sentence is a test in VS Code's Testing
+  view. A test build (debug, predictable random outcomes) is compiled to
+  `Build/tests.ulx` or `tests.z8` and run with no window, in the extension,
+  by the Glulxe and Bocfel interpreters from emglken (Glulx and Z-machine
+  alike). Output is compared with expected output kept in
+  `Story.materials/Tests/`, recorded on a test's first run; differences show
+  as a diff, and "Accept Test Output" updates the expectation.
 - Installed catalog extensions can be upgraded to a newer catalog version,
   from Manage Installed Extensions or by picking the newer version in Install
   Extension, with a warning if another installed extension needs the old one.

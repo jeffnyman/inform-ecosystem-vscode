@@ -40,6 +40,9 @@
     "text adventure"
   ],
   "main": "./dist/extension.js",
+  "activationEvents": [
+    "workspaceContains:**/*.inform/Source/story.ni"
+  ],
   "contributes": {
     "customEditors": [
       {
@@ -168,6 +171,11 @@
         "category": "Inform"
       },
       {
+        "command": "informEcosystem.acceptTestOutput",
+        "title": "Accept Test Output",
+        "category": "Inform"
+      },
+      {
         "command": "informEcosystem.openExtensionDocs",
         "title": "Open Extension Documentation",
         "category": "Inform"
@@ -276,7 +284,17 @@
           "group": "1_inform@1"
         }
       ],
+      "testing/item/context": [
+        {
+          "command": "informEcosystem.acceptTestOutput",
+          "when": "controllerId == 'informEcosystem.tests'"
+        }
+      ],
       "commandPalette": [
+        {
+          "command": "informEcosystem.acceptTestOutput",
+          "when": "false"
+        },
         {
           "command": "informEcosystem.pageBack",
           "when": "activeWebviewPanelId == 'informEcosystem.docs' || activeWebviewPanelId == 'informEcosystem.index' || activeWebviewPanelId == 'informEcosystem.extensionDocs'"
@@ -625,8 +643,9 @@
     "vscode:prepublish": "npm run build",
     "package": "npx @vscode/vsce package",
     "fetch-parchment": "node scripts/fetch-parchment.mjs",
-    "build": "npm run fetch-parchment && npm run clean && npm run compile && npm run format && npm run lint && node esbuild.mjs",
-    "test": "npm run compile-tests && node esbuild.mjs && npx vscode-test",
+    "copy-engines": "node scripts/copy-engines.mjs",
+    "build": "npm run fetch-parchment && npm run copy-engines && npm run clean && npm run compile && npm run format && npm run lint && node esbuild.mjs",
+    "test": "npm run copy-engines && npm run compile-tests && node esbuild.mjs && npx vscode-test",
     "compile-tests": "npx tsc -p . --outDir out",
     "compile": "npx tsc --noEmit",
     "lint": "npx eslint src",
@@ -644,6 +663,7 @@
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.4.1",
     "@vscode/vsce": "^4.0.0",
+    "emglken": "0.7.2",
     "esbuild": "0.25.1",
     "eslint": "^9.22.0",
     "eslint-config-prettier": "^10.1.1",

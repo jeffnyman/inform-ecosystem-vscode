@@ -166,6 +166,39 @@ installed extension needs the old version. Only unchanged copies from the catalo
 be removed or upgraded here; your own extensions, and edited copies, are never
 deleted or replaced.
 
+## Testing
+
+Every `Test me with "..."` sentence in a project's `story.ni` is a test. They
+appear in VS Code's Testing view, under the project, and with a run button
+beside the sentence in the source.
+
+Running them compiles the project as a test build (debug, with Inform's
+predictable random outcomes) into `Build/tests.ulx` or `tests.z8`, leaving the
+playable story alone. The story is then run with no window and sent
+`test me`, so Inform plays the script itself, just as in the IDE. Its output
+is compared with the expected output kept in
+`Story.materials/Tests/<name>.txt`:
+
+- the first run of a test records its output as the expected output;
+- after that, any difference fails the test, with a side-by-side comparison
+  of the expected and actual output;
+- if the change is intended, **Accept Test Output** (right-click the test, or
+  its project for all of them) makes the latest output the expected output.
+
+Both Glulx and Z-machine projects can be tested. A test takes a few
+milliseconds once the project is compiled.
+
+**About the engines.** Tests run in the extension itself, not in the player:
+the Glulxe and Bocfel interpreters from the
+[emglken](https://github.com/curiousdannii/emglken) package, as WebAssembly,
+in `engines/`. They add about 0.7 MB to the extension. Parchment, the
+player, contains the same interpreters, but the code that drives them is
+built into Parchment with its browser interface, and emglken's driver cannot
+load Parchment's copies: they come from a newer build than the latest emglken
+release. If a later emglken release matches Parchment again, the test runner
+could use Parchment's interpreters and ship only emglken's small driver files,
+dropping most of that 0.7 MB; see `scripts/copy-engines.mjs`.
+
 ## Playing stories in VS Code
 
 Story files open in a player tab: `.ulx` and `.gblorb` (Glulx), and `.z3`,

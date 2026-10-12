@@ -21,7 +21,13 @@ import { downloadCompilers, setToolchainsRoot } from "./download";
 import { newProject } from "./newproject";
 import { outputChannel, run } from "./runner";
 import { openInPlayer } from "../player/editor";
-import { NOT_FOUND_HELP, locateTool, locateToolchain, toolPath } from "./tools";
+import {
+  NOT_FOUND_HELP,
+  Toolchain,
+  locateTool,
+  locateToolchain,
+  toolPath,
+} from "./tools";
 
 const diagnostics = vscode.languages.createDiagnosticCollection("inform");
 
@@ -110,7 +116,6 @@ async function compileProject(release: boolean) {
     return;
   }
   await vscode.workspace.saveAll();
-  ensureProjectFiles(project);
 
   const out = outputChannel();
   out.show(true);
@@ -126,64 +131,19 @@ async function compileProject(release: boolean) {
       cancellable: true,
     },
     async (progress, token) => {
-      // 1. inform7
-      progress.report({ message: "inform7" });
-      const i7args = ["-internal", toolchain.internalDir];
-      if (toolchain.externalDir) {
-        i7args.push("-external", toolchain.externalDir);
-      }
-      i7args.push("-project", project.dir, `-format=${fmt.inform7Format}`);
-      // Without this, the first compile on Linux (no ~/Inform yet) also reads
-      // every built-in extension for the census, and Skeleton Keys clashes
-      // with the Standard Rules, failing a project that does not use it.
-      // The census only feeds extension documentation, which we do not show.
-      i7args.push("-no-census-update");
-      if (release) {
-        i7args.push("-release");
-      }
-      if (project.settings.nobbleRng) {
-        i7args.push("-rng");
-      }
-      const i7 = await run(
-        toolPath(toolchain, "inform7"),
-        i7args,
-        project.dir,
+      const story = await buildStory(project, toolchain, {
+        release,
+        rng: project.settings.nobbleRng,
+        output: "output",
+        progress,
         token,
-      );
-      const html = readIfExists(path.join(project.buildDir, "Problems.html"));
-      const i7problems = parseInform7Output(i7.output, html);
-      publish(i7problems, (file) =>
-        resolveInform7File(project, toolchain.externalDir, file),
-      );
-      if (!inform7Succeeded(i7.output)) {
-        vscode.window.showErrorMessage(
-          `Inform 7: translation failed (${i7problems.length} problem${i7problems.length === 1 ? "" : "s"}). See the Problems panel.`,
-        );
+      });
+      if (!story) {
         return;
       }
+      let result = story;
 
-      // 2. inform6
-      progress.report({ message: "inform6" });
-      const story = `output.${fmt.storyExtension}`;
-      const i6 = await run(
-        toolPath(toolchain, "inform6"),
-        [fmt.inform6Switches, "+include_path=../Source,./", "auto.inf", story],
-        project.buildDir,
-        token,
-      );
-      const i6problems = parseInform6Output(i6.output);
-      publish(i6problems, (file) =>
-        file ? path.resolve(project.buildDir, file) : undefined,
-      );
-      if (!inform6Succeeded(i6.output, i6.code)) {
-        vscode.window.showErrorMessage(
-          "Inform 6 failed; see the Inform output channel.",
-        );
-        return;
-      }
-      let result = path.join(project.buildDir, story);
-
-      // 3. inblorb, for a release with a Blorb
+      // inblorb, for a release with a Blorb
       const blurb = path.join(project.dir, "Release.blurb");
       if (release && project.settings.createBlorb && fs.existsSync(blurb)) {
         progress.report({ message: "inblorb" });
@@ -203,6 +163,85 @@ async function compileProject(release: boolean) {
       afterCompile(result);
     },
   );
+}
+
+/**
+ * Translate a project with inform7 and compile the result with inform6, into
+ * Build/<output>.ulx or .z8, publishing any problems. Resolves with the story
+ * file, or undefined if either step failed (having said so).
+ */
+export async function buildStory(
+  project: Project,
+  toolchain: Toolchain,
+  options: {
+    release: boolean;
+    /** Make random outcomes predictable, as for testing. */
+    rng: boolean;
+    output: string;
+    progress?: vscode.Progress<{ message?: string }>;
+    token?: vscode.CancellationToken;
+  },
+): Promise<string | undefined> {
+  ensureProjectFiles(project);
+  const fmt = formatDetails(project.settings.format, options.release);
+
+  // 1. inform7
+  options.progress?.report({ message: "inform7" });
+  const i7args = ["-internal", toolchain.internalDir];
+  if (toolchain.externalDir) {
+    i7args.push("-external", toolchain.externalDir);
+  }
+  i7args.push("-project", project.dir, `-format=${fmt.inform7Format}`);
+  // Without this, the first compile on Linux (no ~/Inform yet) also reads
+  // every built-in extension for the census, and Skeleton Keys clashes
+  // with the Standard Rules, failing a project that does not use it.
+  // The census only feeds extension documentation, which is produced on
+  // its own when wanted (see extensions/docs.ts).
+  i7args.push("-no-census-update");
+  if (options.release) {
+    i7args.push("-release");
+  }
+  if (options.rng) {
+    i7args.push("-rng");
+  }
+  const i7 = await run(
+    toolPath(toolchain, "inform7"),
+    i7args,
+    project.dir,
+    options.token,
+  );
+  const html = readIfExists(path.join(project.buildDir, "Problems.html"));
+  const i7problems = parseInform7Output(i7.output, html);
+  publish(i7problems, (file) =>
+    resolveInform7File(project, toolchain.externalDir, file),
+  );
+  if (!inform7Succeeded(i7.output)) {
+    vscode.window.showErrorMessage(
+      `Inform 7: translation failed (${i7problems.length} problem${i7problems.length === 1 ? "" : "s"}). See the Problems panel.`,
+    );
+    return undefined;
+  }
+
+  // 2. inform6
+  options.progress?.report({ message: "inform6" });
+  const story = `${options.output}.${fmt.storyExtension}`;
+  const i6 = await run(
+    toolPath(toolchain, "inform6"),
+    [fmt.inform6Switches, "+include_path=../Source,./", "auto.inf", story],
+    project.buildDir,
+    options.token,
+  );
+  const i6problems = parseInform6Output(i6.output);
+  publish(i6problems, (file) =>
+    file ? path.resolve(project.buildDir, file) : undefined,
+  );
+  if (!inform6Succeeded(i6.output, i6.code)) {
+    vscode.window.showErrorMessage(
+      "Inform 6 failed; see the Inform output channel.",
+    );
+    return undefined;
+  }
+  return path.join(project.buildDir, story);
 }
 
 function resolveInform7File(
@@ -331,7 +370,7 @@ async function compileInform6File(release: boolean) {
  * The compilers were not found: offer to download them, a folder picker, or
  * the setting itself.
  */
-async function offerToLocateCompilers() {
+export async function offerToLocateCompilers() {
   const download = "Download Compilers";
   const choose = "Choose Folder...";
   const open = "Open Settings";

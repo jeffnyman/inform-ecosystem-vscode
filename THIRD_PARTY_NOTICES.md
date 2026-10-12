@@ -60,3 +60,22 @@ packaged extension. It contains:
 
 The player shell around it (`webview/player.js`, `webview/player.css`,
 `src/player/`) is this project's own code.
+
+## Story engines for testing (not committed; copied at build time)
+
+`engines/` holds two interpreters from the emglken package by Dannii Willis
+(https://github.com/curiousdannii/emglken), pinned in `package.json` and copied
+unmodified by `scripts/copy-engines.mjs`. They run stories with no window for
+the Testing view. Only these files are taken from the package, which as a
+whole is labelled GPL-2.0 because it also contains other interpreters
+(TADS, Scare) that are not used here.
+
+| Component | Author | Licence |
+|---|---|---|
+| Emglken (`glulxe.js`, `bocfel-noz6.js` build glue; `LICENSE`) | Dannii Willis | MIT |
+| RemGlk-rs (Glk library, within the WebAssembly) | Dannii Willis | MIT |
+| Glulxe Glulx interpreter (`glulxe.wasm`) | Andrew Plotkin | MIT |
+| Bocfel Z-machine interpreter (`bocfel-noz6.wasm`) | Chris Spiegel | MIT |
+
+The GlkOte and file dialog that drive them (`src/testing/engine.ts`) are this
+project's own code.
