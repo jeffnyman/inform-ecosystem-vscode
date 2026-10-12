@@ -142,6 +142,11 @@
         "category": "Inform"
       },
       {
+        "command": "informEcosystem.downloadCompilers",
+        "title": "Download Compilers",
+        "category": "Inform"
+      },
+      {
         "command": "informEcosystem.verify",
         "title": "Verify Inform Ecosystem",
         "category": "Inform"
@@ -209,7 +214,7 @@
         "informEcosystem.compilersPath": {
           "type": "string",
           "default": "",
-          "markdownDescription": "Folder containing the Inform tools (`inform7`, `inform6`, `inblorb`, ...). Leave empty to look for a `Windows-Inform7\\Build\\Compilers` folder near the workspace (as produced by inform-builder), an installed Inform IDE, or the PATH."
+          "markdownDescription": "Folder containing the Inform tools (`inform7`, `inform6`, `inblorb`, ...). Leave empty to look for a `Windows-Inform7\\Build\\Compilers` folder near the workspace (as produced by inform-builder), compilers fetched with **Inform: Download Compilers**, an installed Inform IDE, or the PATH."
         },
         "informEcosystem.internalPath": {
           "type": "string",

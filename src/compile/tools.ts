@@ -3,6 +3,8 @@ import * as os from "node:os";
 import * as path from "node:path";
 import * as vscode from "vscode";
 
+import { installedToolchains } from "./download";
+
 /**
  * Where the Inform tools live. The extension does not ship compilers; it
  * finds them. In order:
@@ -11,8 +13,9 @@ import * as vscode from "vscode";
  *   2. the INFORM_COMPILERS environment variable
  *   3. a Build\Compilers folder of a Windows-Inform7 checkout near the
  *      workspace, which is what the inform-builder project produces
- *   4. an installed Inform IDE (Windows Program Files, or Inform.app on macOS)
- *   5. inform7 on the PATH
+ *   4. a toolchain downloaded with "Inform: Download Compilers", newest first
+ *   5. an installed Inform IDE (Windows Program Files, or Inform.app on macOS)
+ *   6. inform7 on the PATH
  *
  * The Internal folder, which inform7 needs for every run, is taken from the
  * setting or found beside the compilers.
@@ -72,6 +75,13 @@ function candidateCompilerDirs(): { dir: string; origin: string }[] {
     }
   }
 
+  for (const t of installedToolchains()) {
+    out.push({
+      dir: t.compilersDir,
+      origin: `downloaded toolchain ${t.version}`,
+    });
+  }
+
   if (process.platform === "win32") {
     for (const pf of [
       process.env["ProgramFiles"],
@@ -116,6 +126,7 @@ function findInternal(compilersDir: string): string | undefined {
     path.join(compilersDir, "..", "Internal"), // Windows IDE and inform-builder layout
     path.join(compilersDir, "..", "Resources", "Internal"), // Inform.app
     path.join(compilersDir, "Internal"),
+    path.join(compilersDir, ".."), // downloaded toolchain: the package root is Internal
     "/usr/share/inform7/Internal",
     "/usr/local/share/inform7/Internal",
   ];
@@ -167,6 +178,7 @@ export function locateTool(name: string): string | undefined {
 }
 
 export const NOT_FOUND_HELP =
-  "Inform compilers not found. Set informEcosystem.compilersPath to a folder " +
+  "Inform compilers not found. Download them with Inform: Download Compilers, " +
+  "or set informEcosystem.compilersPath to a folder " +
   "containing inform7, inform6 and inblorb (for example Windows-Inform7\\Build\\Compilers " +
   "produced by inform-builder, or the Compilers folder of an installed Inform IDE).";

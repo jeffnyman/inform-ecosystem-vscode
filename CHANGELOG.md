@@ -5,7 +5,16 @@ following the [Keep a Changelog](http://keepachangelog.com/) conventions.
 
 ## [Unreleased]
 
-Nothing yet.
+- "Inform: Download Compilers" fetches a complete Inform 10.1.2 toolchain
+  (the Informant toolchain packages for Windows, Linux and macOS), verifies
+  its SHA-256 and unpacks it into the extension's storage. Downloaded
+  compilers are found after any configured or nearby inform-builder ones and
+  before an installed IDE or the PATH. When no compilers are found, the error
+  now offers the download.
+- Inform 7 compiles pass `-no-census-update`. On Linux, the first compile
+  for a user with no `~/Inform` folder otherwise failed with two problems in
+  the built-in Skeleton Keys extension, and inform7 no longer writes
+  extension documentation into the home folder.
 
 ## [0.1.0] - 2026-10-03
 

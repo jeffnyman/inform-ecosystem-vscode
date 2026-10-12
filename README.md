@@ -75,10 +75,19 @@ A bare project folder with only `Source/story.ni` works; the `uuid.txt` that
 The extension does not bundle compilers. It looks, in order, at the
 `informEcosystem.compilersPath` setting, the `INFORM_COMPILERS` environment
 variable, a `Windows-Inform7\Build\Compilers` folder near the workspace (the
-layout produced by the companion inform-builder project), an installed Inform IDE
+layout produced by the companion inform-builder project), compilers fetched
+with **Inform: Download Compilers**, an installed Inform IDE
 (`Program Files\Inform\Compilers` on Windows, `Inform.app` on macOS), and the
 PATH. The `Internal` folder is taken from `informEcosystem.internalPath` or
 found beside the compilers.
+
+If you have no Inform installation, run **Inform: Download Compilers**, or
+choose *Download Compilers* when a compile reports that none were found. It
+fetches a complete Inform 10.1.2 toolchain for Windows, Linux or macOS (about
+51 MB) from the
+[Informant toolchain releases](https://github.com/interactivefiction/informant-toolchains/releases),
+checks it against a pinned SHA-256, and unpacks it into the extension's own
+storage. Nothing else on your system is changed.
 
 ## Playing stories in VS Code
 

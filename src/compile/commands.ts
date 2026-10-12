@@ -17,6 +17,7 @@ import {
   listProjects,
   loadProject,
 } from "./project";
+import { downloadCompilers, setToolchainsRoot } from "./download";
 import { outputChannel, run } from "./runner";
 import { openInPlayer } from "../player/editor";
 import { NOT_FOUND_HELP, locateTool, locateToolchain, toolPath } from "./tools";
@@ -131,6 +132,11 @@ async function compileProject(release: boolean) {
         i7args.push("-external", toolchain.externalDir);
       }
       i7args.push("-project", project.dir, `-format=${fmt.inform7Format}`);
+      // Without this, the first compile on Linux (no ~/Inform yet) also reads
+      // every built-in extension for the census, and Skeleton Keys clashes
+      // with the Standard Rules, failing a project that does not use it.
+      // The census only feeds extension documentation, which we do not show.
+      i7args.push("-no-census-update");
       if (release) {
         i7args.push("-release");
       }
@@ -282,7 +288,7 @@ async function compileInform6File(release: boolean) {
   }
   const inform6 = locateTool("inform6");
   if (!inform6) {
-    vscode.window.showErrorMessage(NOT_FOUND_HELP);
+    await offerToLocateCompilers();
     return;
   }
   await editor.document.save();
@@ -320,16 +326,23 @@ async function compileInform6File(release: boolean) {
 
 // --- Misc --------------------------------------------------------------------
 
-/** The compilers were not found: offer a folder picker, or the setting itself. */
+/**
+ * The compilers were not found: offer to download them, a folder picker, or
+ * the setting itself.
+ */
 async function offerToLocateCompilers() {
+  const download = "Download Compilers";
   const choose = "Choose Folder...";
   const open = "Open Settings";
   const answer = await vscode.window.showErrorMessage(
     NOT_FOUND_HELP,
+    download,
     choose,
     open,
   );
-  if (answer === choose) {
+  if (answer === download) {
+    await downloadAndShow();
+  } else if (answer === choose) {
     await chooseCompilersPath();
   } else if (answer === open) {
     vscode.commands.executeCommand(
@@ -373,6 +386,12 @@ async function chooseCompilersPath() {
     vscode.ConfigurationTarget.Global,
   );
   showToolchain();
+}
+
+async function downloadAndShow() {
+  if (await downloadCompilers()) {
+    showToolchain();
+  }
 }
 
 function showToolchain() {
@@ -447,6 +466,7 @@ function newestStory(buildDir: string): string | undefined {
 }
 
 export function registerCompileCommands(context: vscode.ExtensionContext) {
+  setToolchainsRoot(path.join(context.globalStorageUri.fsPath, "toolchains"));
   context.subscriptions.push(
     diagnostics,
     vscode.commands.registerCommand("informEcosystem.compile", () =>
@@ -473,6 +493,10 @@ export function registerCompileCommands(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand(
       "informEcosystem.chooseCompilersPath",
       chooseCompilersPath,
+    ),
+    vscode.commands.registerCommand(
+      "informEcosystem.downloadCompilers",
+      downloadAndShow,
     ),
   );
 }
