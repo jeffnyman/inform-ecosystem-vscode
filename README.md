@@ -227,13 +227,28 @@ part of this repository; see `THIRD_PARTY_NOTICES.md` for its licences.
 
 ## Status
 
-Highlighting, folding, outline, snippets, compiling and playing are in place.
-See the [CHANGELOG](CHANGELOG.md).
+In place: highlighting, folding, outline and snippets for every language;
+compiling and playing; downloading compilers; new projects; the
+documentation and the Index; installing and documenting extensions; and
+testing, including recording tests in the player. See the
+[CHANGELOG](CHANGELOG.md).
 
 ## Acknowledgements
 
 Parts of the grammars were informed by Natrium729's Inform 6 and Inform 7
-extensions; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+extensions.
+
+Much of the IDE side (downloading compilers, the documentation and Index
+viewers, installing extensions, and testing) follows
+[Informant](https://github.com/interactivefiction/informant), an Inform
+development environment for VS Code by OpcodeASM, whose compiler packages and
+extension catalog this extension downloads.
+
+Stories are played by [Parchment](https://github.com/curiousdannii/parchment)
+and tested with the interpreters of
+[emglken](https://github.com/curiousdannii/emglken), both by Dannii Willis.
+
+See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for licences.
 
 ## Licence
 

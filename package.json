@@ -3,8 +3,8 @@
   "displayName": "Inform Ecosystem",
   "publisher": "jeffnyman",
   "icon": "./inform.png",
-  "version": "0.1.0",
-  "description": "Language and tool support for the Inform ecosystem: Inform 7, Inform 6, Inweb, Intest and Preform.",
+  "version": "0.2.0",
+  "description": "Write, compile, play and test Inform stories in VS Code, with Inform 7's documentation, Index and extensions; plus language support for Inform 6, Inweb, Intest and Preform.",
   "license": "MIT",
   "author": {
     "name": "Jeff Nyman",
