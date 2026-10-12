@@ -88,11 +88,33 @@ describe("Pages", function () {
     assert.ok(!html.includes("e3</script>"), "the fragment must be escaped");
   });
 
+  it("inverts a light-only page in a dark theme only when asked", () => {
+    const page = `<html><head><title>T</title></head><body class="paper"></body></html>`;
+    const options = { baseUri: "B", cspSource: "S", search: "", hash: "" };
+    const inverted = preparePage(page, { ...options, invertWhenDark: true });
+    assert.match(
+      inverted,
+      /@media \(prefers-color-scheme: dark\) \{ html \{ background-color: #121212; \} body \{ filter: invert\(1\) hue-rotate\(180deg\);/,
+    );
+    assert.match(
+      inverted,
+      /img, video \{ filter: invert\(1\) hue-rotate\(180deg\); \}/,
+    );
+    assert.ok(!preparePage(page, options).includes("filter:"));
+  });
+
   it("leaves a page with its own dark design dark in a dark theme", () => {
     const html = preparePage(
       `<html><head><style>@media (prefers-color-scheme: dark) { :root { --x: #000; } }</style></head></html>`,
-      { baseUri: "B", cspSource: "S", search: "", hash: "" },
+      {
+        baseUri: "B",
+        cspSource: "S",
+        search: "",
+        hash: "",
+        invertWhenDark: true,
+      },
     );
+    assert.ok(!html.includes("filter:"), "its own design, not an inversion");
     assert.match(
       html,
       /@media \(prefers-color-scheme: light\) \{ body \{ color: #000000; background-color: #ffffff; \}/,

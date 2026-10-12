@@ -321,6 +321,19 @@
           "default": "",
           "markdownDescription": "Folder holding Inform's documentation: either the Windows IDE's `Documentation` folder (with `index.html` and `doc1.html`) or one with `book/WI_1_1.html` inside. Leave empty to use the documentation that comes with the compilers; downloaded compilers always include it."
         },
+        "informEcosystem.documentation.colorTheme": {
+          "type": "string",
+          "enum": [
+            "followTheme",
+            "light"
+          ],
+          "enumDescriptions": [
+            "Dark in a dark colour theme: the pages' colours are inverted, keeping their hues, with pictures left as they are.",
+            "Always the documentation's own black on white."
+          ],
+          "default": "followTheme",
+          "description": "How the documentation looks in a dark colour theme. The Index always follows the theme, with Inform's own dark design."
+        },
         "informEcosystem.inform7.defaultFormat": {
           "type": "string",
           "enum": [

@@ -34,6 +34,8 @@ export interface Site {
   rewrite?(html: string, uri: (file: string) => string): string;
   /** A link in a scheme other than http(s): or javascript:. */
   onLink?(href: string, from: PagePanel): void;
+  /** Whether light-only pages are shown inverted in a dark theme; asked at each render. */
+  invertWhenDark?(): boolean;
 }
 
 /** Paste code escapes characters as [=0xNNNN=]; turn them back. */
@@ -111,7 +113,13 @@ function pageScript(search: string, hash: string): string {
  */
 export function preparePage(
   html: string,
-  page: { baseUri: string; cspSource: string; search: string; hash: string },
+  page: {
+    baseUri: string;
+    cspSource: string;
+    search: string;
+    hash: string;
+    invertWhenDark?: boolean;
+  },
 ): string {
   // The pages' scripts are inline, and so are their onclick handlers and
   // javascript: links; they are local files, from Inform or its compiler.
@@ -128,20 +136,39 @@ export function preparePage(
   // IDE's window, which supplies the body's colours. Supply them here; the
   // pages' own styles, which follow, still have the last word.
   //
-  // The documentation is light only: black on white, whatever the theme.
   // The Index has a dark design of its own, under prefers-color-scheme:
   // dark, which a webview in a dark theme matches. It leaves plain text to
   // the body too, so give it white on the dark background its design uses,
   // and the theme's link colour, which suits a dark page as blue does not.
+  //
+  // The documentation is light only: black on white. In a dark theme it can
+  // be inverted instead, with the hues turned back round so links stay blue
+  // and pictures inverted again to look as they should. The page is first
+  // softened to near-black on light gray, which inverts to light text on
+  // dark gray rather than glaring white on black; the filter goes on the
+  // body, with the margins around it given that dark gray directly.
   const light =
     "body { color: #000000; background-color: #ffffff; }" +
     " a, a:hover { color: #0000ee; }";
+  const invert = "filter: invert(1) hue-rotate(180deg);";
+  let colours: string;
+  if (/prefers-color-scheme\s*:\s*dark/.test(html)) {
+    colours =
+      `@media (prefers-color-scheme: light) { ${light} }` +
+      " @media (prefers-color-scheme: dark) {" +
+      " body { color: #ffffff; background-color: #121212; } }";
+  } else if (page.invertWhenDark) {
+    colours =
+      light +
+      " @media (prefers-color-scheme: dark) {" +
+      " html { background-color: #121212; }" +
+      ` body { ${invert} min-height: 100vh; color: #1a1a1a; background-color: #ededed !important; }` +
+      ` img, video { ${invert} } }`;
+  } else {
+    colours = light;
+  }
   const defaults =
-    (/prefers-color-scheme\s*:\s*dark/.test(html)
-      ? `@media (prefers-color-scheme: light) { ${light} }` +
-        " @media (prefers-color-scheme: dark) {" +
-        " body { color: #ffffff; background-color: #121212; } }"
-      : light) +
+    colours +
     " blockquote { background: transparent; border-color: transparent; }";
   const head =
     `\n<meta http-equiv="Content-Security-Policy" content="${csp}">` +
@@ -327,6 +354,7 @@ export class PagePanel {
       cspSource: webview.cspSource,
       search,
       hash,
+      invertWhenDark: this.site.invertWhenDark?.() ?? false,
     });
     const title = /<title>([^<]*)<\/title>/i.exec(html)?.[1].trim();
     this.panel.title = title || this.site.pageTitle?.(page) || this.site.title;

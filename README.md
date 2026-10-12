@@ -106,7 +106,10 @@ the Inform for Windows IDE's `Documentation` folder, opening at its contents
 page, or the copy inside compilers fetched with **Inform: Download Compilers**.
 To use another copy, set `informEcosystem.documentationPath` to that folder.
 If none is found, the extension offers to download the compilers or to open
-the online copy instead. The IDE's "create a new project from this example"
+the online copy instead. In a dark colour theme the pages are shown inverted, with
+their colours' hues and the pictures kept as they are; set
+`informEcosystem.documentation.colorTheme` to `light` to keep them black on
+white. The IDE's "create a new project from this example"
 links are not supported yet.
 
 ## The Index

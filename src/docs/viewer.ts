@@ -153,6 +153,9 @@ function site(docs: Documentation): Site {
     resourceRoots: [docs.root],
     home: docs.layout.home,
     contents: docs.layout.contents,
+    invertWhenDark: () =>
+      config().get<string>("documentation.colorTheme", "followTheme") ===
+      "followTheme",
     rewrite: (html, uri) => {
       const root = uri(docs.root);
       return html
@@ -215,5 +218,12 @@ export function registerDocs(context: vscode.ExtensionContext) {
       "informEcosystem.openDocs",
       openDocumentation,
     ),
+    vscode.workspace.onDidChangeConfiguration((event) => {
+      if (
+        event.affectsConfiguration("informEcosystem.documentation.colorTheme")
+      ) {
+        PagePanel.get(DOCS_VIEW_TYPE)?.reload();
+      }
+    }),
   );
 }
