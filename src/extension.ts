@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 
 import { registerOutline } from "./common/symbols";
 import { registerCompileCommands } from "./compile/commands";
+import { registerDocs } from "./docs/viewer";
 import { StoryPlayerProvider } from "./player/editor";
 import { Inform7FoldingProvider } from "./inform7/folding";
 import { outlineInform7 } from "./inform7/outline";
@@ -17,6 +18,7 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   registerCompileCommands(context);
+  registerDocs(context);
   context.subscriptions.push(StoryPlayerProvider.register(context));
 
   context.subscriptions.push(new Inform7FoldingProvider());

@@ -152,12 +152,60 @@
         "category": "Inform"
       },
       {
+        "command": "informEcosystem.openDocs",
+        "title": "Open Documentation",
+        "category": "Inform",
+        "icon": "$(book)"
+      },
+      {
+        "command": "informEcosystem.docsBack",
+        "title": "Back",
+        "category": "Inform Documentation",
+        "icon": "$(arrow-left)",
+        "enablement": "informEcosystem.docsCanGoBack"
+      },
+      {
+        "command": "informEcosystem.docsForward",
+        "title": "Forward",
+        "category": "Inform Documentation",
+        "icon": "$(arrow-right)",
+        "enablement": "informEcosystem.docsCanGoForward"
+      },
+      {
+        "command": "informEcosystem.docsContents",
+        "title": "Go to...",
+        "category": "Inform Documentation",
+        "icon": "$(list-unordered)"
+      },
+      {
         "command": "informEcosystem.verify",
         "title": "Verify Inform Ecosystem",
         "category": "Inform"
       }
     ],
     "menus": {
+      "editor/title": [
+        {
+          "command": "informEcosystem.openDocs",
+          "when": "resourceLangId == inform7 || resourceLangId == inform7extension",
+          "group": "navigation@90"
+        },
+        {
+          "command": "informEcosystem.docsBack",
+          "when": "activeWebviewPanelId == 'informEcosystem.docs'",
+          "group": "navigation@1"
+        },
+        {
+          "command": "informEcosystem.docsForward",
+          "when": "activeWebviewPanelId == 'informEcosystem.docs'",
+          "group": "navigation@2"
+        },
+        {
+          "command": "informEcosystem.docsContents",
+          "when": "activeWebviewPanelId == 'informEcosystem.docs'",
+          "group": "navigation@3"
+        }
+      ],
       "editor/title/run": [
         {
           "command": "informEcosystem.compile",
@@ -204,6 +252,18 @@
       ],
       "commandPalette": [
         {
+          "command": "informEcosystem.docsBack",
+          "when": "activeWebviewPanelId == 'informEcosystem.docs'"
+        },
+        {
+          "command": "informEcosystem.docsForward",
+          "when": "activeWebviewPanelId == 'informEcosystem.docs'"
+        },
+        {
+          "command": "informEcosystem.docsContents",
+          "when": "activeWebviewPanelId == 'informEcosystem.docs'"
+        },
+        {
           "command": "informEcosystem.compileInform6",
           "when": "resourceLangId == inform6"
         },
@@ -213,6 +273,20 @@
         }
       ]
     },
+    "keybindings": [
+      {
+        "command": "informEcosystem.docsBack",
+        "key": "alt+left",
+        "mac": "cmd+[",
+        "when": "activeWebviewPanelId == 'informEcosystem.docs'"
+      },
+      {
+        "command": "informEcosystem.docsForward",
+        "key": "alt+right",
+        "mac": "cmd+]",
+        "when": "activeWebviewPanelId == 'informEcosystem.docs'"
+      }
+    ],
     "configuration": {
       "title": "Inform Ecosystem",
       "properties": {
@@ -230,6 +304,11 @@
           "type": "string",
           "default": "",
           "markdownDescription": "The external folder holding your installed extensions, passed to `inform7 -external`. Leave empty to use `Documents/Inform` if it exists."
+        },
+        "informEcosystem.documentationPath": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Folder holding Inform's documentation: either the Windows IDE's `Documentation` folder (with `index.html` and `doc1.html`) or one with `book/WI_1_1.html` inside. Leave empty to use the documentation that comes with the compilers; downloaded compilers always include it."
         },
         "informEcosystem.inform7.defaultFormat": {
           "type": "string",
@@ -495,7 +574,7 @@
     "package": "npx @vscode/vsce package",
     "fetch-parchment": "node scripts/fetch-parchment.mjs",
     "build": "npm run fetch-parchment && npm run clean && npm run compile && npm run format && npm run lint && node esbuild.mjs",
-    "test": "npm run compile-tests && npx vscode-test",
+    "test": "npm run compile-tests && node esbuild.mjs && npx vscode-test",
     "compile-tests": "npx tsc -p . --outDir out",
     "compile": "npx tsc --noEmit",
     "lint": "npx eslint src",

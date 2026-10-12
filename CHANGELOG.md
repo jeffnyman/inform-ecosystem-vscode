@@ -5,6 +5,18 @@ following the [Keep a Changelog](http://keepachangelog.com/) conventions.
 
 ## [Unreleased]
 
+- On Windows, an Inform IDE installed outside Program Files is found through
+  the uninstall entry its installer writes in the registry.
+- The documentation viewer also reads the Windows IDE's documentation, which
+  is laid out differently (doc1.html, inform:/ image paths), and opens it at
+  its contents page.
+- `npm test` rebuilds the extension bundle first; it used to test whatever
+  `dist/extension.js` was last built.
+- "Inform: Open Documentation" shows Writing with Inform and The Inform Recipe
+  Book beside the source, from the documentation that comes with the
+  compilers (or `informEcosystem.documentationPath`). Links stay in the panel,
+  with Back, Forward and Go to... in its title bar, and an example's paste
+  button inserts its code into the Inform source.
 - "Inform: New Project..." asks for a title, an author (remembered for next
   time) and a folder, creates `Title.inform` with `Source/story.ni` and
   `uuid.txt`, and opens the story. Characters a file system would refuse are

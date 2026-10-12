@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
@@ -14,7 +15,8 @@ import { installedToolchains } from "./download";
  *   3. a Build\Compilers folder of a Windows-Inform7 checkout near the
  *      workspace, which is what the inform-builder project produces
  *   4. a toolchain downloaded with "Inform: Download Compilers", newest first
- *   5. an installed Inform IDE (Windows Program Files, or Inform.app on macOS)
+ *   5. an installed Inform IDE: on Windows wherever the installer's registry
+ *      entry says, then Program Files; on macOS, Inform.app
  *   6. inform7 on the PATH
  *
  * The Internal folder, which inform7 needs for every run, is taken from the
@@ -83,6 +85,12 @@ function candidateCompilerDirs(): { dir: string; origin: string }[] {
   }
 
   if (process.platform === "win32") {
+    for (const dir of registeredInformInstalls()) {
+      out.push({
+        dir: path.join(dir, "Compilers"),
+        origin: `installed Inform IDE (${dir})`,
+      });
+    }
     for (const pf of [
       process.env["ProgramFiles"],
       process.env["ProgramFiles(x86)"],
@@ -114,6 +122,78 @@ function candidateCompilerDirs(): { dir: string; origin: string }[] {
     }
   }
   return out;
+}
+
+let registered: string[] | undefined;
+
+/**
+ * Install folders of Inform for Windows, read from the uninstall entry its
+ * installer writes, so an install outside Program Files is found. The 64-bit
+ * build's entry is in the 32-bit registry view, so both views are searched.
+ * Read once per session.
+ */
+function registeredInformInstalls(): string[] {
+  if (registered) {
+    return registered;
+  }
+  const reg = (args: string[]) => {
+    try {
+      return execFileSync("reg.exe", ["query", ...args], {
+        encoding: "utf8",
+        windowsHide: true,
+        stdio: ["ignore", "pipe", "ignore"],
+        timeout: 5000,
+      });
+    } catch {
+      return ""; // reg exits non-zero when nothing matches
+    }
+  };
+  const dirs = new Set<string>();
+  for (const hive of ["HKLM", "HKCU"]) {
+    for (const view of ["/reg:32", "/reg:64"]) {
+      const uninstall = `${hive}\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall`;
+      const search = reg([
+        uninstall,
+        "/s",
+        "/f",
+        "Inform for Windows",
+        "/d",
+        view,
+      ]);
+      for (const key of registryKeys(search)) {
+        const icon = registryValue(
+          reg([key, "/v", "DisplayIcon", view]),
+          "DisplayIcon",
+        );
+        if (icon) {
+          dirs.add(
+            path.dirname(icon.replace(/,\s*-?\d+$/, "").replace(/"/g, "")),
+          );
+        }
+      }
+    }
+  }
+  registered = [...dirs];
+  return registered;
+}
+
+/** The key names in the output of `reg query`. */
+export function registryKeys(output: string): string[] {
+  return output
+    .split(/\r?\n/)
+    .filter((line) => line.startsWith("HKEY_"))
+    .map((line) => line.trim());
+}
+
+/** A value's data in the output of `reg query /v`. */
+export function registryValue(
+  output: string,
+  name: string,
+): string | undefined {
+  const m = new RegExp(`^\\s+${name}\\s+REG_\\w+\\s+(.*?)\\s*$`, "m").exec(
+    output,
+  );
+  return m ? m[1] : undefined;
 }
 
 function findInternal(compilersDir: string): string | undefined {

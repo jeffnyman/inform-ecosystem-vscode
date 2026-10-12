@@ -77,9 +77,9 @@ The extension does not bundle compilers. It looks, in order, at the
 `informEcosystem.compilersPath` setting, the `INFORM_COMPILERS` environment
 variable, a `Windows-Inform7\Build\Compilers` folder near the workspace (the
 layout produced by the companion inform-builder project), compilers fetched
-with **Inform: Download Compilers**, an installed Inform IDE
-(`Program Files\Inform\Compilers` on Windows, `Inform.app` on macOS), and the
-PATH. The `Internal` folder is taken from `informEcosystem.internalPath` or
+with **Inform: Download Compilers**, an installed Inform IDE (on Windows,
+wherever the Inform installer recorded it, otherwise
+`Program Files\Inform\Compilers`; on macOS, `Inform.app`), and the PATH. The `Internal` folder is taken from `informEcosystem.internalPath` or
 found beside the compilers.
 
 If you have no Inform installation, run **Inform: Download Compilers**, or
@@ -89,6 +89,25 @@ fetches a complete Inform 10.1.2 toolchain for Windows, Linux or macOS (about
 [Informant toolchain releases](https://github.com/interactivefiction/informant-toolchains/releases),
 checks it against a pinned SHA-256, and unpacks it into the extension's own
 storage. Nothing else on your system is changed.
+
+## Reading the documentation
+
+**Inform: Open Documentation** (the book button in the title bar of an Inform 7
+file) opens *Writing with Inform* beside your source. Links between pages
+stay in the panel, web links open in your browser, and Back, Forward and
+**Go to...** (*Writing with Inform*, *The Inform Recipe Book*, the General
+Index and the example indexes) sit in the panel's title bar; Alt+Left and
+Alt+Right, or the mouse's back and forward buttons, also work, and Ctrl+F
+searches the page. An example's paste button inserts its code at the cursor
+of the Inform source you were last editing.
+
+The pages are read from the documentation that comes with the compilers:
+the Inform for Windows IDE's `Documentation` folder, opening at its contents
+page, or the copy inside compilers fetched with **Inform: Download Compilers**.
+To use another copy, set `informEcosystem.documentationPath` to that folder.
+If none is found, the extension offers to download the compilers or to open
+the online copy instead. The IDE's "create a new project from this example"
+links are not supported yet.
 
 ## Playing stories in VS Code
 
