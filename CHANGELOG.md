@@ -5,6 +5,11 @@ following the [Keep a Changelog](http://keepachangelog.com/) conventions.
 
 ## [Unreleased]
 
+- Extension documentation: "Inform: Open Extension Documentation", the
+  Index's extension links, and Manage Installed Extensions show the
+  documentation of built-in, shared and project extensions. It is written by
+  an extensions census run on its own (safe on Linux, unlike one inside a
+  compile) into the extension's storage, never into the user's Inform folder.
 - "Inform: Install Extension..." installs extensions from the Inform 10.1
   community library catalog, with the extensions they include, verified by
   size and SHA-256, either for all projects (Documents/Inform/Extensions) or

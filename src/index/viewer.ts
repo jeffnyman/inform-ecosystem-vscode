@@ -4,9 +4,12 @@ import * as vscode from "vscode";
 
 import { PagePanel, Site } from "../common/pages";
 import { pickProject } from "../compile/commands";
-import { installedToolchains } from "../compile/download";
-import { locateToolchain } from "../compile/tools";
-import { findDocumentation, openDocumentationPage } from "../docs/viewer";
+import {
+  findImagery,
+  imageryRewrite,
+  openDocumentationLink,
+} from "../docs/viewer";
+import { censusPage, openExtensionDocumentation } from "../extensions/docs";
 
 /**
  * Shows a project's Index, the reports inform7 writes into its Index folder
@@ -33,43 +36,10 @@ const REPORTS = [
   "World",
 ];
 
-const IMAGE_FAMILIES = [
-  "doc_images",
-  "map_icons",
-  "scene_icons",
-  "bg_images",
-  "outcome_images",
-];
-
-/**
- * The folder holding Inform's image folders (doc_images and the rest): the
- * Imagery folder of a downloaded toolchain, the Windows IDE's Documentation
- * folder, or the website documentation's assets/images.
- */
-export function findImagery(): string | undefined {
-  const candidates: string[] = [];
-  const toolchain = locateToolchain();
-  if (toolchain) {
-    candidates.push(path.join(toolchain.internalDir, "Imagery"));
-  }
-  const docs = findDocumentation();
-  if (docs) {
-    candidates.push(docs.root, path.join(docs.root, "assets", "images"));
-  }
-  for (const t of installedToolchains()) {
-    candidates.push(path.join(t.compilersDir, "..", "Imagery"));
-  }
-  return candidates.find((dir) => fs.existsSync(path.join(dir, "doc_images")));
-}
-
 export function indexSite(projectDir: string): Site {
   const root = path.join(projectDir, "Index");
   const name = path.basename(projectDir).replace(/\.inform$/i, "");
   const imagery = findImagery();
-  const families = new RegExp(
-    `(["'=(])inform:/(${IMAGE_FAMILIES.join("|")})/`,
-    "g",
-  );
   return {
     viewType: INDEX_VIEW_TYPE,
     title: `${name} Index`,
@@ -81,20 +51,12 @@ export function indexSite(projectDir: string): Site {
     contents: REPORTS.filter((r) =>
       fs.existsSync(path.join(root, `${r}.html`)),
     ).map((r) => ({ label: r, page: `${r}.html` })),
-    // Image references are often unquoted (src=inform:/doc_images/...).
-    rewrite: (html, uri) =>
-      imagery
-        ? html.replace(
-            families,
-            (_, before: string, family: string) =>
-              `${before}${uri(path.join(imagery, family))}/`,
-          )
-        : html,
+    rewrite: imageryRewrite(imagery),
     onLink: (href) => followLink(projectDir, href),
   };
 }
 
-/** The IDE's own links: into the source, and into the documentation. */
+/** The IDE's own links: into the source, the documentation, and extensions' documentation. */
 async function followLink(projectDir: string, href: string) {
   const source = /^source:([^#]+)#line(\d+)$/.exec(href);
   if (source) {
@@ -105,20 +67,12 @@ async function followLink(projectDir: string, href: string) {
     );
     return;
   }
-  const doc = /^inform:\/((R?doc\d+\.html)(#.*)?)$/.exec(href);
-  if (doc) {
-    if (!openDocumentationPage(doc[1], vscode.ViewColumn.Beside)) {
-      vscode.window.showWarningMessage(
-        `The documentation page ${doc[2]} was not found. Open Documentation shows where it is looked for.`,
-      );
-    }
+  if (openDocumentationLink(href)) {
     return;
   }
-  if (/^inform:\/\/Extensions\//.test(href)) {
-    vscode.window.setStatusBarMessage(
-      "Inform: links to extension documentation are not supported yet.",
-      5000,
-    );
+  const extension = /^inform:\/\/Extensions\/(.+)$/.exec(href);
+  if (extension) {
+    await openExtensionDocumentation(projectDir, censusPage(extension[1]));
   }
 }
 

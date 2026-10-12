@@ -3,7 +3,6 @@ import * as os from "node:os";
 import * as path from "node:path";
 import * as vscode from "vscode";
 
-import { findProjectDir, listProjects } from "../compile/project";
 import { locateToolchain } from "../compile/tools";
 import {
   CatalogEntry,
@@ -16,6 +15,11 @@ import {
   resolvePlan,
   sha256,
 } from "./catalog";
+import {
+  currentProject,
+  materialsFolder,
+  openExtensionDocumentation,
+} from "./docs";
 
 /**
  * Installs Inform 7 extensions from the catalog, with what they Include.
@@ -52,28 +56,7 @@ function userExtensionsDir(): string {
 
 /** Story.inform's extensions live in Story.materials/Extensions beside it. */
 function projectExtensionsDir(projectDir: string): string {
-  return path.join(
-    projectDir.replace(/\.inform$/i, ".materials"),
-    "Extensions",
-  );
-}
-
-/** The project being worked on: the active editor's, else the workspace's only one. */
-function currentProject(): string | undefined {
-  const active = vscode.window.activeTextEditor?.document.uri;
-  const fromEditor = active?.scheme === "file" && findProjectDir(active.fsPath);
-  if (fromEditor) {
-    return fromEditor;
-  }
-  const found = new Set<string>();
-  for (const folder of vscode.workspace.workspaceFolders ?? []) {
-    const own = findProjectDir(folder.uri.fsPath);
-    if (own) {
-      found.add(own);
-    }
-    listProjects(folder.uri.fsPath).forEach((p) => found.add(p));
-  }
-  return found.size === 1 ? [...found][0] : undefined;
+  return path.join(materialsFolder(projectDir), "Extensions");
 }
 
 /** The .i7x files under an extensions folder (Author/Title.i7x), by their headers. */
@@ -359,7 +342,7 @@ async function manageExtensions(context: vscode.ExtensionContext) {
   const hash = sha256(fs.readFileSync(item.file));
   const removable = !!catalog?.some((e) => e.sha256 === hash);
 
-  const actions = ["Open", "Reveal in File Explorer"];
+  const actions = ["Open Documentation", "Open", "Reveal in File Explorer"];
   if (removable) {
     actions.push("Remove");
   }
@@ -368,7 +351,12 @@ async function manageExtensions(context: vscode.ExtensionContext) {
       ? `${item.title} by ${item.author}`
       : `${item.title} by ${item.author} (not a catalog copy, so it cannot be removed here)`,
   });
-  if (action === "Open") {
+  if (action === "Open Documentation") {
+    await openExtensionDocumentation(
+      project,
+      `Extensions/${item.author}/${item.title}.html`,
+    );
+  } else if (action === "Open") {
     await vscode.window.showTextDocument(vscode.Uri.file(item.file));
   } else if (action === "Reveal in File Explorer") {
     await vscode.commands.executeCommand(

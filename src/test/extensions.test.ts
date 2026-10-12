@@ -10,6 +10,7 @@ import {
   resolvePlan,
   satisfies,
 } from "../extensions/catalog";
+import { censusPage } from "../extensions/docs";
 
 const SHA = "a".repeat(64);
 
@@ -119,6 +120,17 @@ describe("Extension catalog", function () {
       },
     );
     assert.strictEqual(parseHeader("Not an extension."), undefined);
+  });
+
+  it("finds the census page an Index link names, in either form", () => {
+    assert.strictEqual(
+      censusPage("Extensions/Graham%20Nelson/English%20Language.html"),
+      "Extensions/Graham Nelson/English Language.html",
+    );
+    assert.strictEqual(
+      censusPage("Documentation/Graham%20Nelson/English%20Language.html"),
+      "Extensions/Graham Nelson/English Language.html",
+    );
   });
 
   it("plans what an install needs", () => {

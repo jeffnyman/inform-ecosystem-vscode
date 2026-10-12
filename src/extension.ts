@@ -4,6 +4,7 @@ import { registerPageCommands } from "./common/pages";
 import { registerOutline } from "./common/symbols";
 import { registerCompileCommands } from "./compile/commands";
 import { registerDocs } from "./docs/viewer";
+import { registerExtensionDocs } from "./extensions/docs";
 import { registerExtensions } from "./extensions/manager";
 import { registerIndex } from "./index/viewer";
 import { StoryPlayerProvider } from "./player/editor";
@@ -25,6 +26,7 @@ export function activate(context: vscode.ExtensionContext) {
   registerDocs(context);
   registerIndex(context);
   registerExtensions(context);
+  registerExtensionDocs(context);
   context.subscriptions.push(StoryPlayerProvider.register(context));
 
   context.subscriptions.push(new Inform7FoldingProvider());

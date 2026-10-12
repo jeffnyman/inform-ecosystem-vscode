@@ -145,6 +145,14 @@ export function findDocumentation(): Documentation | undefined {
   return undefined;
 }
 
+/** Whether light-only documentation pages are inverted in a dark theme. */
+export function documentationInverts(): boolean {
+  return (
+    config().get<string>("documentation.colorTheme", "followTheme") ===
+    "followTheme"
+  );
+}
+
 function site(docs: Documentation): Site {
   return {
     viewType: DOCS_VIEW_TYPE,
@@ -153,9 +161,7 @@ function site(docs: Documentation): Site {
     resourceRoots: [docs.root],
     home: docs.layout.home,
     contents: docs.layout.contents,
-    invertWhenDark: () =>
-      config().get<string>("documentation.colorTheme", "followTheme") ===
-      "followTheme",
+    invertWhenDark: documentationInverts,
     rewrite: (html, uri) => {
       const root = uri(docs.root);
       return html
@@ -199,7 +205,11 @@ export function openDocumentationPage(
 ): boolean {
   const docs = findDocumentation();
   const [file, hash] = name.split("#");
-  const page = docs && docs.layout.section(docs.root, file);
+  const page =
+    docs &&
+    (file === "index.html"
+      ? docs.layout.home
+      : docs.layout.section(docs.root, file));
   if (!docs || !page || !fs.existsSync(path.join(docs.root, page))) {
     return false;
   }
@@ -210,6 +220,71 @@ export function openDocumentationPage(
     open?.panel.viewColumn ?? column,
   );
   return true;
+}
+
+/**
+ * Follow a link into the documentation as the Index and extension
+ * documentation give them: inform:/docN.html, inform:/RdocN.html, or
+ * inform:/index.html for its contents. False if the link is not one of those.
+ */
+export function openDocumentationLink(href: string): boolean {
+  const m = /^inform:\/((R?doc\d+\.html|index\.html)(#.*)?)$/.exec(href);
+  if (!m) {
+    return false;
+  }
+  if (!openDocumentationPage(m[1], vscode.ViewColumn.Beside)) {
+    vscode.window.showWarningMessage(
+      `The documentation page ${m[2]} was not found. Open Documentation shows where it is looked for.`,
+    );
+  }
+  return true;
+}
+
+const IMAGE_FAMILIES = [
+  "doc_images",
+  "map_icons",
+  "scene_icons",
+  "bg_images",
+  "outcome_images",
+];
+
+/**
+ * The folder holding Inform's image folders (doc_images and the rest), which
+ * the Index and extension documentation refer to as inform:/doc_images/...:
+ * the Imagery folder of a downloaded toolchain, the Windows IDE's
+ * Documentation folder, or the website documentation's assets/images.
+ */
+export function findImagery(): string | undefined {
+  const candidates: string[] = [];
+  const toolchain = locateToolchain();
+  if (toolchain) {
+    candidates.push(path.join(toolchain.internalDir, "Imagery"));
+  }
+  const docs = findDocumentation();
+  if (docs) {
+    candidates.push(docs.root, path.join(docs.root, "assets", "images"));
+  }
+  for (const t of installedToolchains()) {
+    candidates.push(path.join(t.compilersDir, "..", "Imagery"));
+  }
+  return candidates.find((dir) => fs.existsSync(path.join(dir, "doc_images")));
+}
+
+/** A Site rewrite pointing inform:/doc_images/... and the like into the imagery folder. */
+export function imageryRewrite(imagery: string | undefined): Site["rewrite"] {
+  // References are often unquoted (src=inform:/doc_images/...).
+  const families = new RegExp(
+    `(["'=(])inform:/(${IMAGE_FAMILIES.join("|")})/`,
+    "g",
+  );
+  return (html, uri) =>
+    imagery
+      ? html.replace(
+          families,
+          (_, before: string, family: string) =>
+            `${before}${uri(path.join(imagery, family))}/`,
+        )
+      : html;
 }
 
 export function registerDocs(context: vscode.ExtensionContext) {
@@ -223,6 +298,7 @@ export function registerDocs(context: vscode.ExtensionContext) {
         event.affectsConfiguration("informEcosystem.documentation.colorTheme")
       ) {
         PagePanel.get(DOCS_VIEW_TYPE)?.reload();
+        PagePanel.get("informEcosystem.extensionDocs")?.reload();
       }
     }),
   );

@@ -127,8 +127,8 @@ documentation. It reloads when you recompile. Within it:
 - the boxes that show and hide parts of a page work as in the IDE.
 
 The Index's images come from Inform's own folders, so they need the
-documentation or the downloaded compilers. Links to extension documentation
-are not supported yet.
+documentation or the downloaded compilers. Its links to an extension's
+documentation open that extension's pages in their own panel (see below).
 
 ## Installing extensions
 
@@ -150,8 +150,15 @@ Inform finds extensions in two places, and either can be used:
 The confirmation offers both; `informEcosystem.extensions.installLocation`
 decides which is the default button (all projects, unless set to `project`).
 
+**Inform: Open Extension Documentation** shows the documentation of the
+extensions available to the current project: those built into Inform, those
+installed for all projects, and the project's own. Inform writes these pages
+each time they are wanted, into the extension's storage, so they are always
+current and nothing is written to your Inform folder. The Index's extension
+links and Manage Installed Extensions open them too.
+
 **Inform: Manage Installed Extensions...** lists what is installed in both
-places, to open, reveal or remove. Only unchanged copies from the catalog can
+places, to read the documentation of, open, reveal or remove. Only unchanged copies from the catalog can
 be removed here; your own extensions, and edited copies, are never deleted.
 
 ## Playing stories in VS Code
