@@ -122,13 +122,15 @@ export function preparePage(
     `font-src ${page.cspSource}`,
     "script-src 'unsafe-inline'",
   ].join("; ");
-  // VS Code styles every webview from the colour theme: text in the editor's
-  // foreground colour, links in its link colour, blockquotes tinted. The
-  // pages are white paper that sets no body text colour, so in a dark theme
-  // their text came out light gray on white. Put back a browser's defaults;
+  // VS Code styles every webview from the colour theme: a transparent body
+  // over the editor's background, text in the editor's foreground colour,
+  // links in its link colour, blockquotes tinted. The pages were made for the
+  // IDE's white window: the documentation sets a white background but no text
+  // colour (light gray on white in a dark theme), the Index neither (the
+  // editor's dark background showed through). Put back a browser's defaults;
   // the pages' own styles, which follow, still have the last word.
   const defaults =
-    "body { color: #000000; }" +
+    "body { color: #000000; background-color: #ffffff; }" +
     " a, a:hover { color: #0000ee; }" +
     " blockquote { background: transparent; border-color: transparent; }";
   const head =

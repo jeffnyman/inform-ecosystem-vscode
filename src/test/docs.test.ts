@@ -73,8 +73,11 @@ describe("Pages", function () {
       /^<html><head>\n<meta http-equiv="Content-Security-Policy"/,
     );
     assert.match(html, /<base href="https:\/\/res\/docs\/book\/">/);
-    // Black text whatever the colour theme, ahead of the page's own styles.
-    assert.match(html, /<style>body \{ color: #000000; \}/);
+    // Black on white whatever the colour theme, ahead of the page's own styles.
+    assert.match(
+      html,
+      /<style>body { color: #000000; background-color: #ffffff; }/,
+    );
     assert.ok(html.indexOf("<style>") < html.indexOf("<title>"));
     assert.match(
       html,

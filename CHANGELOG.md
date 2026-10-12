@@ -11,6 +11,8 @@ following the [Keep a Changelog](http://keepachangelog.com/) conventions.
   panel at that section, in either documentation layout.
 - Back, Forward and Go to... are shared by the documentation and Index
   panels.
+- Documentation and Index pages are black on white in any colour theme; the
+  Index used to show black text on a dark theme's background.
 - On Windows, an Inform IDE installed outside Program Files is found through
   the uninstall entry its installer writes in the registry.
 - The documentation viewer also reads the Windows IDE's documentation, which
