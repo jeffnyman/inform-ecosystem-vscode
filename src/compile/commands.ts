@@ -18,6 +18,7 @@ import {
   loadProject,
 } from "./project";
 import { downloadCompilers, setToolchainsRoot } from "./download";
+import { newProject } from "./newproject";
 import { outputChannel, run } from "./runner";
 import { openInPlayer } from "../player/editor";
 import { NOT_FOUND_HELP, locateTool, locateToolchain, toolPath } from "./tools";
@@ -497,6 +498,9 @@ export function registerCompileCommands(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand(
       "informEcosystem.downloadCompilers",
       downloadAndShow,
+    ),
+    vscode.commands.registerCommand("informEcosystem.newProject", () =>
+      newProject(context),
     ),
   );
 }

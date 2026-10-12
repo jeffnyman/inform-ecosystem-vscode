@@ -5,6 +5,10 @@ following the [Keep a Changelog](http://keepachangelog.com/) conventions.
 
 ## [Unreleased]
 
+- "Inform: New Project..." asks for a title, an author (remembered for next
+  time) and a folder, creates `Title.inform` with `Source/story.ni` and
+  `uuid.txt`, and opens the story. Characters a file system would refuse are
+  left out of the folder name but kept in the story's title.
 - "Inform: Download Compilers" fetches a complete Inform 10.1.2 toolchain
   (the Informant toolchain packages for Windows, Linux and macOS), verifies
   its SHA-256 and unpacks it into the extension's storage. Downloaded

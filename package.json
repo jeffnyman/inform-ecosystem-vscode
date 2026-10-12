@@ -97,6 +97,11 @@
     ],
     "commands": [
       {
+        "command": "informEcosystem.newProject",
+        "title": "New Project...",
+        "category": "Inform"
+      },
+      {
         "command": "informEcosystem.compile",
         "title": "Compile Project (debug build)",
         "category": "Inform",

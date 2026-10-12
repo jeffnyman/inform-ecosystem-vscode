@@ -56,6 +56,7 @@ panel, linked to the source line, and the full compiler output is in the
 
 | Command | What it does |
 |---|---|
+| Inform: New Project... | Asks for a title, an author and a folder, creates `Title.inform` with a `Source/story.ni` that compiles straight away, and opens it |
 | Inform: Compile Project (debug build) | `inform7` then `inform6` with debugging on; output in the project's `Build` folder |
 | Inform: Release Project | Release build; bound into a Blorb if the project's settings ask for one and `Release.blurb` exists |
 | Inform: Play Compiled Story | Opens the newest story file in `Build` in the player tab |

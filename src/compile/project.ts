@@ -81,6 +81,54 @@ export function ensureProjectFiles(project: Project) {
 }
 
 /**
+ * A folder name for a story title: the title less the characters Windows,
+ * macOS or Linux refuse in file names, and without the trailing dots and
+ * spaces Windows drops. Empty if nothing usable is left.
+ */
+export function projectFolderName(title: string): string {
+  return title
+    .replace(/[<>:"/\\|?*\x00-\x1f]/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .replace(/[. ]+$/, "");
+}
+
+/**
+ * The opening of a new story: the bibliographic sentence and one room, so it
+ * compiles at once. Inform text has no escape for a double quote, so any in
+ * the title or author become single quotes.
+ */
+export function newStorySource(title: string, author: string): string {
+  const clean = (s: string) => s.replace(/"/g, "'").trim();
+  const byline = clean(author) ? ` by ${clean(author)}` : "";
+  return `"${clean(title)}"${byline}\n\nThe Starting Room is a room.\n`;
+}
+
+/**
+ * Create Title.inform inside a folder, holding Source/story.ni and uuid.txt,
+ * and return the path of story.ni. Refuses to touch an existing folder.
+ */
+export function createProject(
+  parent: string,
+  title: string,
+  author: string,
+): string {
+  const name = projectFolderName(title);
+  if (!name) {
+    throw new Error("The title has no characters usable in a folder name.");
+  }
+  const dir = path.join(parent, name + ".inform");
+  if (fs.existsSync(dir)) {
+    throw new Error(`${dir} already exists.`);
+  }
+  fs.mkdirSync(path.join(dir, "Source"), { recursive: true });
+  const story = path.join(dir, "Source", "story.ni");
+  fs.writeFileSync(story, newStorySource(title, author));
+  fs.writeFileSync(path.join(dir, "uuid.txt"), crypto.randomUUID() + "\n");
+  return story;
+}
+
+/**
  * Settings.plist is a small XML property list. Only three keys matter here, so
  * a regular-expression read is enough and avoids a dependency.
  */
