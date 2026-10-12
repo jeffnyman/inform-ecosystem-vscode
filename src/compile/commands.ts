@@ -499,8 +499,9 @@ export function registerCompileCommands(context: vscode.ExtensionContext) {
       "informEcosystem.downloadCompilers",
       downloadAndShow,
     ),
-    vscode.commands.registerCommand("informEcosystem.newProject", () =>
-      newProject(context),
+    vscode.commands.registerCommand(
+      "informEcosystem.newProject",
+      (example?: unknown) => newProject(context, example),
     ),
   );
 }

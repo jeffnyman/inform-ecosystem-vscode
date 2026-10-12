@@ -63,8 +63,10 @@ function pageScript(search: string, hash: string): string {
   window.Project = {
     selectView: function () {},
     pasteCode: function (code) { vscode.postMessage({ type: "paste", code: String(code) }); },
-    // Example links in the Windows IDE's documentation; not supported yet.
-    createNewProject: function () {}
+    // "Create a new project" links in the Windows IDE's documentation.
+    createNewProject: function (title, code) {
+      vscode.postMessage({ type: "newProject", title: String(title), code: String(code) });
+    }
   };
   function scrollTo(id) {
     var target = document.getElementById(id) || document.getElementsByName(id)[0];
@@ -366,6 +368,7 @@ export class PagePanel {
     href?: string;
     url?: string;
     code?: string;
+    title?: string;
   }) {
     switch (message?.type) {
       case "navigate":
@@ -381,6 +384,12 @@ export class PagePanel {
         break;
       case "paste":
         await pasteIntoSource(decodePasteCode(String(message.code)));
+        break;
+      case "newProject":
+        await vscode.commands.executeCommand("informEcosystem.newProject", {
+          title: decodePasteCode(String(message.title)),
+          source: decodePasteCode(String(message.code)),
+        });
         break;
       case "back":
         this.step(-1);

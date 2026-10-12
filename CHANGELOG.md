@@ -5,6 +5,11 @@ following the [Keep a Changelog](http://keepachangelog.com/) conventions.
 
 ## [Unreleased]
 
+- Installed catalog extensions can be upgraded to a newer catalog version,
+  from Manage Installed Extensions or by picking the newer version in Install
+  Extension, with a warning if another installed extension needs the old one.
+- The Windows IDE documentation's "create a new project" example buttons
+  start New Project with the example's title and source.
 - Extension documentation: "Inform: Open Extension Documentation", the
   Index's extension links, and Manage Installed Extensions show the
   documentation of built-in, shared and project extensions. It is written by

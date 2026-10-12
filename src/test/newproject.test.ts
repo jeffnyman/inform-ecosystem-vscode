@@ -22,7 +22,13 @@ describe("New Project", function () {
 
   after(async () => {
     await vscode.commands.executeCommand("workbench.action.closeAllEditors");
-    fs.rmSync(parent, { recursive: true, force: true });
+    // Windows may hold the just-closed files for a moment.
+    fs.rmSync(parent, {
+      recursive: true,
+      force: true,
+      maxRetries: 10,
+      retryDelay: 200,
+    });
   });
 
   it("makes a folder name from a title", () => {
@@ -83,6 +89,32 @@ describe("New Project", function () {
       error.calledOnce &&
         /already exists/.test(String(error.firstCall.args[0])),
       "Expected an 'already exists' error",
+    );
+  });
+
+  it("starts a project from a documentation example", async () => {
+    const input = sinon.stub(vscode.window, "showInputBox");
+    // Accept the title offered.
+    input.callsFake(async (options) => options?.value);
+    sinon
+      .stub(vscode.window, "showOpenDialog")
+      .resolves([vscode.Uri.file(parent)]);
+    sinon.stub(vscode.window, "showInformationMessage").resolves(undefined);
+    const source = `"Morning After"\n\nThe Kitchen is a room.\n`;
+    await vscode.commands.executeCommand("informEcosystem.newProject", {
+      title: "Example - Morning After",
+      source,
+    });
+
+    // The example's own opening line stands in for an author.
+    assert.ok(input.calledOnce, "Only the title is asked for");
+    assert.strictEqual(input.firstCall.args[0]?.value, "Morning After");
+    assert.strictEqual(
+      fs.readFileSync(
+        path.join(parent, "Morning After.inform", "Source", "story.ni"),
+        "utf8",
+      ),
+      source,
     );
   });
 

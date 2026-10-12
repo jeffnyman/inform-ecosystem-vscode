@@ -106,12 +106,15 @@ export function newStorySource(title: string, author: string): string {
 
 /**
  * Create Title.inform inside a folder, holding Source/story.ni and uuid.txt,
- * and return the path of story.ni. Refuses to touch an existing folder.
+ * and return the path of story.ni. The story is the given source, such as a
+ * documentation example, or else the usual opening. Refuses to touch an
+ * existing folder.
  */
 export function createProject(
   parent: string,
   title: string,
   author: string,
+  source?: string,
 ): string {
   const name = projectFolderName(title);
   if (!name) {
@@ -123,7 +126,7 @@ export function createProject(
   }
   fs.mkdirSync(path.join(dir, "Source"), { recursive: true });
   const story = path.join(dir, "Source", "story.ni");
-  fs.writeFileSync(story, newStorySource(title, author));
+  fs.writeFileSync(story, source ?? newStorySource(title, author));
   fs.writeFileSync(path.join(dir, "uuid.txt"), crypto.randomUUID() + "\n");
   return story;
 }

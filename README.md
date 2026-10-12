@@ -109,8 +109,9 @@ If none is found, the extension offers to download the compilers or to open
 the online copy instead. In a dark colour theme the pages are shown inverted, with
 their colours' hues and the pictures kept as they are; set
 `informEcosystem.documentation.colorTheme` to `light` to keep them black on
-white. The IDE's "create a new project from this example"
-links are not supported yet.
+white. In the Windows IDE's documentation, an example's
+"create a new project" button starts **New Project** with the example's title
+offered and its source as the story.
 
 ## The Index
 
@@ -158,8 +159,12 @@ current and nothing is written to your Inform folder. The Index's extension
 links and Manage Installed Extensions open them too.
 
 **Inform: Manage Installed Extensions...** lists what is installed in both
-places, to read the documentation of, open, reveal or remove. Only unchanged copies from the catalog can
-be removed here; your own extensions, and edited copies, are never deleted.
+places, to read the documentation of, open, reveal or remove, and to upgrade
+when the catalog has a newer version. An upgrade brings what the newer version
+needs, replaces the old file in the same place, and warns first if another
+installed extension needs the old version. Only unchanged copies from the catalog can
+be removed or upgraded here; your own extensions, and edited copies, are never
+deleted or replaced.
 
 ## Playing stories in VS Code
 
