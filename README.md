@@ -130,6 +130,30 @@ The Index's images come from Inform's own folders, so they need the
 documentation or the downloaded compilers. Links to extension documentation
 are not supported yet.
 
+## Installing extensions
+
+**Inform: Install Extension...** lists the 220 extensions in the community
+library for Inform 10.1 (the catalog Informant publishes), marking those you
+already have. Pick one and you are told what it will bring with it: the
+extensions it includes that you do not yet have, those it will use that are
+already installed or built into Inform, and anything it needs that the
+catalog cannot supply. Each file is checked against the catalog's size and
+SHA-256 before anything is written.
+
+Inform finds extensions in two places, and either can be used:
+
+- **All projects:** `Documents/Inform/Extensions`, shared by every project and
+  by the Inform IDE (or your `informEcosystem.externalPath`);
+- **This project:** the story's own `Story.materials/Extensions`, seen only by
+  that project, and preferred by Inform when both have a copy.
+
+The confirmation offers both; `informEcosystem.extensions.installLocation`
+decides which is the default button (all projects, unless set to `project`).
+
+**Inform: Manage Installed Extensions...** lists what is installed in both
+places, to open, reveal or remove. Only unchanged copies from the catalog can
+be removed here; your own extensions, and edited copies, are never deleted.
+
 ## Playing stories in VS Code
 
 Story files open in a player tab: `.ulx` and `.gblorb` (Glulx), and `.z3`,

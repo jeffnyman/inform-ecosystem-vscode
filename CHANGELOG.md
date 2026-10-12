@@ -5,6 +5,13 @@ following the [Keep a Changelog](http://keepachangelog.com/) conventions.
 
 ## [Unreleased]
 
+- "Inform: Install Extension..." installs extensions from the Inform 10.1
+  community library catalog, with the extensions they include, verified by
+  size and SHA-256, either for all projects (Documents/Inform/Extensions) or
+  for the current project (Story.materials/Extensions); the
+  `informEcosystem.extensions.installLocation` setting picks the default.
+  "Inform: Manage Installed Extensions..." opens, reveals or removes them,
+  removing only unchanged catalog copies.
 - "Inform: Open Index" shows the project's Index beside the source, reloading
   after each compile. Paste buttons paste into the source, source links open
   the source at the line, and documentation links open the documentation

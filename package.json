@@ -158,6 +158,16 @@
         "icon": "$(book)"
       },
       {
+        "command": "informEcosystem.installExtension",
+        "title": "Install Extension...",
+        "category": "Inform"
+      },
+      {
+        "command": "informEcosystem.manageExtensions",
+        "title": "Manage Installed Extensions...",
+        "category": "Inform"
+      },
+      {
         "command": "informEcosystem.openIndex",
         "title": "Open Index",
         "category": "Inform",
@@ -333,6 +343,19 @@
           ],
           "default": "followTheme",
           "description": "How the documentation looks in a dark colour theme. The Index always follows the theme, with Inform's own dark design."
+        },
+        "informEcosystem.extensions.installLocation": {
+          "type": "string",
+          "enum": [
+            "user",
+            "project"
+          ],
+          "enumDescriptions": [
+            "Your Inform folder's Extensions (Documents/Inform/Extensions), shared by every project and by the Inform IDE.",
+            "The project's own Story.materials/Extensions, seen only by that project."
+          ],
+          "default": "user",
+          "description": "Where Install Extension puts extensions by default. Each install offers both."
         },
         "informEcosystem.inform7.defaultFormat": {
           "type": "string",
