@@ -2,6 +2,8 @@ import * as crypto from "node:crypto";
 import * as path from "node:path";
 import * as vscode from "vscode";
 
+import { saveRecordedTest } from "../testing/recording";
+
 /**
  * Plays Z-machine and Glulx story files in an editor tab.
  *
@@ -14,6 +16,18 @@ import * as vscode from "vscode";
  * extension's global storage, each time it is opened or changes on disk.
  */
 export const PLAYER_VIEW_TYPE = "informEcosystem.player";
+
+/**
+ * Every turn played, from Parchment's own transcript recorder: what was
+ * typed (empty for the opening) and what the story printed in reply.
+ */
+export interface PlayerTurn {
+  story: vscode.Uri;
+  input: string;
+  output: string;
+}
+const turnEmitter = new vscode.EventEmitter<PlayerTurn>();
+export const playerTurns = turnEmitter.event;
 
 class StoryDocument implements vscode.CustomDocument {
   constructor(readonly uri: vscode.Uri) {}
@@ -63,7 +77,17 @@ export class StoryPlayerProvider
       ],
     };
 
-    const load = async () => {
+    // The commands typed since Record was pressed, or undefined.
+    let recording: string[] | undefined;
+    const showRecording = () =>
+      panel.webview.postMessage({
+        type: "recording",
+        on: !!recording,
+        count: recording?.length ?? 0,
+      });
+
+    // A fresh load starts the story from the beginning, not from its autosave.
+    const load = async (fresh = false) => {
       try {
         const carrier = await this.writeCarrier(document.uri, storageDir);
         panel.webview.html = this.html(
@@ -71,6 +95,7 @@ export class StoryPlayerProvider
           document.uri,
           parchmentDir,
           carrier,
+          fresh,
         );
       } catch (err) {
         panel.webview.html = errorHtml(
@@ -78,8 +103,6 @@ export class StoryPlayerProvider
         );
       }
     };
-    await load();
-
     const disposables: vscode.Disposable[] = [];
 
     // Reload when the story file is recompiled.
@@ -93,7 +116,7 @@ export class StoryPlayerProvider
       let timer: ReturnType<typeof setTimeout> | undefined;
       const schedule = () => {
         clearTimeout(timer);
-        timer = setTimeout(load, 300);
+        timer = setTimeout(() => load(), 300);
       };
       watcher.onDidChange(schedule, null, disposables);
       watcher.onDidCreate(schedule, null, disposables);
@@ -101,12 +124,47 @@ export class StoryPlayerProvider
     }
 
     // Follow the colour theme.
-    vscode.window.onDidChangeActiveColorTheme(load, null, disposables);
+    vscode.window.onDidChangeActiveColorTheme(() => load(), null, disposables);
 
     panel.webview.onDidReceiveMessage(
-      (message: { type?: string }) => {
-        if (message?.type === "reload") {
-          void load();
+      async (message: {
+        type?: string;
+        on?: boolean;
+        input?: string;
+        output?: string;
+      }) => {
+        switch (message?.type) {
+          case "reload":
+            void load();
+            break;
+          case "ready":
+            void showRecording();
+            break;
+          case "turn": {
+            const input = String(message.input ?? "");
+            turnEmitter.fire({
+              story: document.uri,
+              input,
+              output: String(message.output ?? ""),
+            });
+            if (recording && input.trim()) {
+              recording.push(input.trim());
+              void showRecording();
+            }
+            break;
+          }
+          case "record":
+            if (message.on) {
+              // A test runs from the start of the story, so record from there.
+              recording = [];
+              await load(true);
+            } else if (recording) {
+              const commands = recording;
+              recording = undefined;
+              void showRecording();
+              await saveRecordedTest(document.uri, commands);
+            }
+            break;
         }
       },
       null,
@@ -114,6 +172,9 @@ export class StoryPlayerProvider
     );
 
     panel.onDidDispose(() => disposables.forEach((d) => d.dispose()));
+
+    // Only now, with the listener in place, so the page's first messages are heard.
+    await load();
   }
 
   /** Wrap the story bytes as a JSONP resource, as Parchment's Inform 7 launcher expects. */
@@ -141,6 +202,7 @@ export class StoryPlayerProvider
     story: vscode.Uri,
     parchmentDir: vscode.Uri,
     carrier: vscode.Uri,
+    fresh = false,
   ): string {
     const nonce = crypto.randomBytes(16).toString("hex");
     const res = (dir: vscode.Uri, file: string) =>
@@ -161,7 +223,7 @@ export class StoryPlayerProvider
       // The webview is an iframe; Parchment must not try to break out of it.
       play_in_iframe: 1,
       autoplay: 1,
-      do_vm_autosave: autosave,
+      do_vm_autosave: fresh ? 0 : autosave,
       jsonp: "ParchmentResource",
       lib_path: libPath,
       theme: dark ? "dark" : "",
@@ -198,9 +260,11 @@ export class StoryPlayerProvider
 <link rel="stylesheet" href="${res(webviewDir, "player.css")}">
 <script nonce="${nonce}" src="${res(parchmentDir, "jquery.min.js")}"></script>
 <script nonce="${nonce}" src="${res(parchmentDir, "ie.js")}" nomodule></script>
-<script nonce="${nonce}">window.parchment_options = ${JSON.stringify(options)};</script>
+<script nonce="${nonce}">window.parchment_options = ${JSON.stringify(options)};
+// Parchment's transcript recorder reports each turn here; player.js relays it.
+window.parchment_options.recording_handler = function (turn) { if (window.__informTurn) { window.__informTurn(turn); } };</script>
 <script nonce="${nonce}" src="${res(parchmentDir, "parchment.js")}"></script>
-<script nonce="${nonce}" src="${res(webviewDir, "player.js")}"></script>
+<script nonce="${nonce}" src="${res(webviewDir, "player.js")}" defer></script>
 </head>
 <body>
 <div id="gameport">

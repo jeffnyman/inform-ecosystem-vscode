@@ -32,7 +32,7 @@ body {
   inset: 0;
 }
 
-/* A small reload control in the corner, so a freshly compiled story can be restarted. */
+/* Controls in the corner: restart a freshly compiled story, and record a test. */
 #ie-player-toolbar {
   position: fixed;
   top: 6px;
@@ -58,4 +58,13 @@ body {
 }
 #ie-player-toolbar button:hover {
   background: var(--vscode-button-secondaryHoverBackground, #555);
+}
+
+/* While a test is being recorded, keep the toolbar in view and the Stop button marked. */
+#ie-player-toolbar:has(.ie-recording) {
+  opacity: 1;
+}
+#ie-player-toolbar button.ie-recording {
+  background: var(--vscode-statusBarItem-errorBackground, #c72e0f);
+  color: var(--vscode-statusBarItem-errorForeground, #fff);
 }

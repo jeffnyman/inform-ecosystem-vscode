@@ -6,6 +6,9 @@ import { buildStory, offerToLocateCompilers } from "../compile/commands";
 import { findProjectDir, listProjects, loadProject } from "../compile/project";
 import { locateToolchain } from "../compile/tools";
 import { runStory } from "./engine";
+import { findTests } from "./tests";
+
+export { findTests };
 
 /**
  * Runs a project's Inform tests from VS Code's Testing view.
@@ -23,8 +26,6 @@ import { runStory } from "./engine";
  */
 export const CONTROLLER_ID = "informEcosystem.tests";
 
-const TEST_SENTENCE = /^[ \t]*Test[ \t]+(.+?)[ \t]+with[ \t]+"/gim;
-
 /** The story engines, in the extension's engines folder; set on activation. */
 let enginesDir = "";
 
@@ -33,16 +34,6 @@ const lastOutput = new Map<string, string>();
 
 function config() {
   return vscode.workspace.getConfiguration("informEcosystem");
-}
-
-/** The tests a source text defines: their names, and the line of each. */
-export function findTests(source: string): { name: string; line: number }[] {
-  const tests: { name: string; line: number }[] = [];
-  for (const m of source.matchAll(TEST_SENTENCE)) {
-    const line = source.slice(0, m.index).split("\n").length - 1;
-    tests.push({ name: m[1].trim(), line });
-  }
-  return tests;
 }
 
 function expectedFile(projectDir: string, test: string): string {

@@ -8,12 +8,18 @@ import { registerExtensionDocs } from "./extensions/docs";
 import { registerExtensions } from "./extensions/manager";
 import { registerIndex } from "./index/viewer";
 import { registerTesting } from "./testing/controller";
-import { StoryPlayerProvider } from "./player/editor";
+import { StoryPlayerProvider, playerTurns } from "./player/editor";
 import { Inform7FoldingProvider } from "./inform7/folding";
 import { outlineInform7 } from "./inform7/outline";
 import { outlineInform6 } from "./inform6/outline";
 
-export function activate(context: vscode.ExtensionContext) {
+/** What the extension offers other code, such as its own tests. */
+export interface InformEcosystemApi {
+  /** Every turn played in a player tab. */
+  playerTurns: typeof playerTurns;
+}
+
+export function activate(context: vscode.ExtensionContext): InformEcosystemApi {
   console.log("Inform Ecosystem extension enabled.");
 
   context.subscriptions.push(
@@ -38,6 +44,8 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     registerOutline(["inform6", "inform6template"], outlineInform6),
   );
+
+  return { playerTurns };
 }
 
 export function deactivate() {}

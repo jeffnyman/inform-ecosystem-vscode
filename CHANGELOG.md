@@ -5,6 +5,11 @@ following the [Keep a Changelog](http://keepachangelog.com/) conventions.
 
 ## [Unreleased]
 
+- Record tests in the player: **Record** restarts the story, and **Stop** adds
+  the commands typed to `story.ni` as a `Test <name> with "..."` sentence, from
+  Parchment's own transcript recorder.
+- The player's corner buttons now appear: `player.js` ran in the page's head,
+  before there was a body to add them to, so Restart had never shown.
 - Testing: each `Test me with "..."` sentence is a test in VS Code's Testing
   view. A test build (debug, predictable random outcomes) is compiled to
   `Build/tests.ulx` or `tests.z8` and run with no window, in the extension,

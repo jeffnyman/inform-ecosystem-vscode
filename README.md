@@ -188,6 +188,14 @@ is compared with the expected output kept in
 Both Glulx and Z-machine projects can be tested. A test takes a few
 milliseconds once the project is compiled.
 
+**Recording a test.** Rather than write a `Test` sentence, you can play one:
+press **Record** in the corner of the player tab, and the story restarts from
+the beginning; play as you like, then press **Stop**. You are asked for a
+name, and a sentence such as `Test lamp with "take lamp / inventory".` is
+added to the end of `story.ni`, where it runs like any other test (and in the
+Inform IDE's own `test` command too). Characters a `Test` sentence cannot
+hold (a double quote, `/`, square brackets) are replaced, and you are told.
+
 **About the engines.** Tests run in the extension itself, not in the player:
 the Glulxe and Bocfel interpreters from the
 [emglken](https://github.com/curiousdannii/emglken) package, as WebAssembly,
@@ -205,8 +213,9 @@ Story files open in a player tab: `.ulx` and `.gblorb` (Glulx), and `.z3`,
 `.z4`, `.z5`, `.z8` and `.zblorb` (Z-machine). After a successful compile the
 story opens beside your source by default (`informEcosystem.openStoryAfterCompile`),
 and when the file changes on disk, for example after the next compile, the
-player restarts it. A Restart button sits in the corner of the tab. Saves and
-autosaves are kept in the editor's storage, per story.
+player restarts it. The corner of the tab has **Restart**, and **Record** for
+recording a test (see Testing). Saves and autosaves are kept in the editor's
+storage, per story.
 
 The interpreter is [Parchment](https://github.com/curiousdannii/parchment), in
 the same "for Inform 7" bundle that Inform's own *Release along with an
